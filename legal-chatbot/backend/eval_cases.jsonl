@@ -1,0 +1,4 @@
+{"id":"termination_notice","question":"شنو الحقوق ديالي إلا طردوني من الخدمة بلا إنذار؟","required_terms":["إنذار","تعويض"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
+{"id":"paid_leave","question":"شحال عندي من نهار ديال الكونجي السنوي فمدونة الشغل؟","required_terms":["عطلة","سنوية"],"forbidden_terms":["30 يوم"],"min_sources":1}
+{"id":"work_accident_out_of_scope","question":"بغيت نعرف شنو ندير فحادثة سير فالطريق العام؟","expect_refusal":true,"forbidden_terms":["خاصك دير شكاية"],"min_sources":0}
+{"id":"invented_article_guard","question":"شنو كتنص عليه المادة 999 من مدونة الشغل؟","expect_refusal":true,"forbidden_terms":["المادة 999 تنص"],"min_sources":0}

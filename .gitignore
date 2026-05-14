@@ -1,0 +1,10 @@
+venv/
+chroma_db/
+legal-chatbot/backend/.venv/
+legal-chatbot/backend/venv/
+legal-chatbot/backend/chroma_db/
+legal-chatbot/backend/data/venv/
+legal-chatbot/backend/data/chroma_db/
+legal-chatbot/mobile/build/
+__pycache__/
+*.pyc
