@@ -33,7 +33,11 @@ class ChatApiService {
       final response = await _client
           .post(
             ApiConfig.chatUri,
-            headers: const {'Content-Type': 'application/json'},
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'ngrok-skip-browser-warning': 'true',
+            },
             body: requestBody,
           )
           .timeout(ApiConfig.requestTimeout);

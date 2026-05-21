@@ -1,4 +1,10 @@
-{"id":"termination_notice","question":"شنو الحقوق ديالي إلا طردوني من الخدمة بلا إنذار؟","required_terms":["إنذار","تعويض"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
-{"id":"paid_leave","question":"شحال عندي من نهار ديال الكونجي السنوي فمدونة الشغل؟","required_terms":["عطلة","سنوية"],"forbidden_terms":["30 يوم"],"min_sources":1}
-{"id":"work_accident_out_of_scope","question":"بغيت نعرف شنو ندير فحادثة سير فالطريق العام؟","expect_refusal":true,"forbidden_terms":["خاصك دير شكاية"],"min_sources":0}
-{"id":"invented_article_guard","question":"شنو كتنص عليه المادة 999 من مدونة الشغل؟","expect_refusal":true,"forbidden_terms":["المادة 999 تنص"],"min_sources":0}
+{"id":"licenciement_sans_motif","question":"شنو الحقوق ديالي إلا طردني المشغل بلا سبب؟","required_terms":["طرد","المصدر"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
+{"id":"certificat_travail","question":"واش عندي الحق فشهادة العمل من بعد ما نخرج من الخدمة؟","required_terms":["شهادة","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"preavis","question":"شنو هو préavis فمدونة الشغل؟","required_terms":["المصدر"],"forbidden_terms":["أكيد"],"min_sources":1}
+{"id":"conge_annuel","question":"شحال عندي من نهار ديال الكونجي السنوي؟","required_terms":["العطلة","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maladie_certificat","question":"واش المشغل يقدر يمنعني من الغياب بسبب المرض إلا عندي شهادة طبية؟","required_terms":["مرض","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"article_impossible","question":"شنو كتنص عليه المادة 999 من مدونة الشغل؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 999 تنص"],"min_sources":0}
+{"id":"hors_scope_divorce","question":"كيفاش ندير طلاق اتفاقي؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["محكمة الأسرة"],"min_sources":0}
+{"id":"salaire_non_paye","question":"شنو ندير إلا المشغل ما خلصنيش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"heures_supp","question":"واش الساعات الإضافية خاصها تخلص؟","required_terms":["الساعات","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"cdd_cdi","question":"شنو الفرق بين CDD و CDI؟","required_terms":["العقد","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
