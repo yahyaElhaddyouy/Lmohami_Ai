@@ -1,6 +1,6 @@
 # Trust workflow
 
-This project uses RAG over `data/code_travail_maroc.pdf`. The local Ollama model is not really being trained here; trust comes from better sources, better retrieval, stricter prompting, and repeated evaluation.
+This project uses RAG over `data/code_travail_maroc.pdf`. The local Ollama model is not really being trained here yet; trust comes from better sources, better retrieval, verified legal answers, stricter prompting, and repeated evaluation.
 
 ## Run the chatbot
 
@@ -20,9 +20,10 @@ Then run:
 
 ```powershell
 python evaluate_trust.py --report trust_report.json
+python stress_questions.py --minutes 10
 ```
 
-The evaluator prints a trust score. Treat the chatbot as **not trusted** until it scores at least 90% on a growing set of real questions.
+The evaluator prints a trust score. Treat the chatbot as **not trusted** until it scores at least 90% on a growing set of real questions. Keep short Darija, out-of-scope, impossible article, and hallucination-trap cases in the suite.
 
 ## Keep improving it
 
@@ -31,6 +32,15 @@ The evaluator prints a trust score. Treat the chatbot as **not trusted** until i
 3. Improve retrieval, chunking, prompt rules, or source documents.
 4. Re-run `python evaluate_trust.py --report trust_report.json`.
 5. Repeat until the score stays high on old and new cases.
+
+## Debug retrieval
+
+Set `RAG_DEBUG=true` to print the expanded query and retrieved pages:
+
+```powershell
+$env:RAG_DEBUG="true"
+python rag.py
+```
 
 ## Eval case format
 

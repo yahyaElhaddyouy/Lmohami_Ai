@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../config/api_config.dart';
 import '../models/chat_message.dart';
 import '../services/chat_api_service.dart';
 import '../theme/app_theme.dart';
@@ -16,19 +17,35 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final ChatApiService _apiService = ChatApiService();
   final ScrollController _scrollController = ScrollController();
-  final List<ChatMessage> _messages = [
-    ChatMessage(
+  late final List<ChatMessage> _messages;
+
+  static const List<String> _exampleQuestions = [
+    'واش المشغل يقدر يطردني بلا سبب؟',
+    'شنو ندير إلا ما خلصنيش؟',
+    'واش الحامل عندها حماية من الطرد؟',
+    'واش الساعات الإضافية خاصها تخلص؟',
+    'أنا وقع ليا حادث داخل الخدمة، شنو الحقوق ديالي؟',
+  ];
+
+  ChatMessage _welcomeMessage() {
+    return ChatMessage(
       id: 'welcome',
       role: ChatMessageRole.assistant,
       text:
           'سلام، أنا مساعدك فمدونة الشغل المغربية. سَوّلني على الطرد، العطلة، العقد، التعويضات أو حقوق الأجير.',
       createdAt: DateTime.now(),
-    ),
-  ];
+    );
+  }
 
   bool _isSending = false;
 
   bool get _hasUserMessages => _messages.any((message) => message.isUser);
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = [_welcomeMessage()];
+  }
 
   @override
   void dispose() {
@@ -143,6 +160,18 @@ class _ChatScreenState extends State<ChatScreen> {
     _sendMessage(question, addUserMessage: false);
   }
 
+  void _clearChat() {
+    if (_isSending) {
+      return;
+    }
+
+    setState(() {
+      _messages
+        ..clear()
+        ..add(_welcomeMessage());
+    });
+  }
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scrollController.hasClients) {
@@ -162,13 +191,17 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       body: Column(
         children: [
-          const _ChatHeader(),
+          _ChatHeader(onClear: _clearChat, canClear: _hasUserMessages),
           Expanded(
             child: ListView(
               controller: _scrollController,
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 18),
               children: [
-                if (!_hasUserMessages) const _EmptyState(),
+                if (!_hasUserMessages)
+                  _EmptyState(
+                    questions: _exampleQuestions,
+                    onQuestionSelected: (question) => _sendMessage(question),
+                  ),
                 for (final message in _messages)
                   MessageBubble(
                     message: message,
@@ -186,7 +219,10 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class _ChatHeader extends StatelessWidget {
-  const _ChatHeader();
+  const _ChatHeader({required this.onClear, required this.canClear});
+
+  final VoidCallback onClear;
+  final bool canClear;
 
   @override
   Widget build(BuildContext context) {
@@ -246,20 +282,40 @@ class _ChatHeader extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.circle,
+                      size: 8,
+                      color: AppTheme.emerald,
+                    ),
+                    const SizedBox(width: 6),
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Text(
+                        ApiConfig.environmentLabel,
+                        style: Theme.of(context).textTheme.labelSmall
+                            ?.copyWith(
+                              color: Colors.white.withValues(alpha: 0.72),
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-          Container(
-            width: 42,
-            height: 42,
-            decoration: BoxDecoration(
-              color: AppTheme.emerald.withValues(alpha: 0.18),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Icon(
-              Icons.gavel_rounded,
-              color: Colors.white,
-              size: 22,
+          IconButton.filledTonal(
+            onPressed: canClear ? onClear : null,
+            tooltip: 'مسح المحادثة',
+            icon: const Icon(Icons.delete_sweep_rounded),
+            style: IconButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.white.withValues(alpha: 0.12),
+              disabledForegroundColor: Colors.white.withValues(alpha: 0.35),
+              disabledBackgroundColor: Colors.white.withValues(alpha: 0.08),
             ),
           ),
         ],
@@ -269,7 +325,13 @@ class _ChatHeader extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState();
+  const _EmptyState({
+    required this.questions,
+    required this.onQuestionSelected,
+  });
+
+  final List<String> questions;
+  final ValueChanged<String> onQuestionSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -327,6 +389,19 @@ class _EmptyState extends StatelessWidget {
               height: 1.5,
               fontWeight: FontWeight.w600,
             ),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final question in questions)
+                ActionChip(
+                  avatar: const Icon(Icons.help_outline_rounded, size: 17),
+                  label: Text(question),
+                  onPressed: () => onQuestionSelected(question),
+                ),
+            ],
           ),
         ],
       ),

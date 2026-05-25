@@ -1,4 +1,5 @@
 import os
+import random
 import re
 import sys
 from dataclasses import dataclass
@@ -21,10 +22,11 @@ OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/emb
 OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", "http://localhost:11434/api/chat")
 
 EMBED_MODEL = os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text")
-CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:3b")
+CHAT_MODEL = os.getenv("OLLAMA_CHAT_MODEL", "qwen2.5:7b")
 N_RESULTS = int(os.getenv("RAG_N_RESULTS", "2"))
 MAX_GENERATED_ANSWER_CHARS = int(os.getenv("RAG_MAX_ANSWER_CHARS", "1800"))
 MIN_RELEVANCE_SCORE = int(os.getenv("RAG_MIN_RELEVANCE_SCORE", "4"))
+RAG_DEBUG = os.getenv("RAG_DEBUG", "").strip().lower() in {"1", "true", "yes", "on"}
 
 INSUFFICIENT_CONTEXT_MESSAGE = (
     "ما لقيتش جواب قانوني كافي فالمصدر المتوفر. "
@@ -39,7 +41,8 @@ LEGAL_TOPIC_TERMS = {
     ],
     "salary": [
         "الأجر", "اجر", "أجرة", "الصالير", "السالير", "خلصني",
-        "ما خلصنيش", "ما تخلصتش", "الخلاص", "عدم أداء الأجر",
+        "ما خلصنيش", "ما تخلصتش", "ماعطانيش الصالير", "ما عطانيش الصالير",
+        "الخلاص", "عدم أداء الأجر",
         "أجر غير مؤدى", "salaire", "rémunération", "remuneration",
         "paiement du salaire", "défaut de paiement du salaire",
     ],
@@ -54,7 +57,7 @@ LEGAL_TOPIC_TERMS = {
         "certificat médical", "certificat medical",
     ],
     "termination": [
-        "طرد", "فصل", "خروج", "بلا سبب", "سبب مقبول",
+        "طرد", "طردوني", "فصل", "خروج", "بلا سبب", "سبب مقبول",
         "licenciement", "indemnité de licenciement",
         "dommages-intérêts", "تعويض", "الفصل",
     ],
@@ -67,10 +70,11 @@ LEGAL_TOPIC_TERMS = {
         "être entendu", "proces-verbal", "procès-verbal",
     ],
     "gross_misconduct": [
-        "خطأ جسيم", "faute grave", "بدون تعويض", "sans préavis",
+        "خطأ جسيم", "الخطأ الجسيم", "faute grave", "بدون تعويض",
+        "مسطرة تأديبية", "مسطرة التأديب", "محضر الاستماع", "sans préavis",
     ],
     "paid_leave": [
-        "كونجي", "عطلة", "إجازة", "اجازة", "سنوي",
+        "كونجي", "الكونجي", "رفض الكونجي", "عطلة", "إجازة", "اجازة", "سنوي",
         "العطلة السنوية", "congé annuel payé", "conge annuel paye",
         "jour et demi", "Article 231",
     ],
@@ -78,10 +82,12 @@ LEGAL_TOPIC_TERMS = {
         "CDD", "CDI", "عقد", "العقد", "contrat", "durée déterminée",
         "durée indéterminée", "contrat à durée déterminée",
         "contrat a duree determinee", "contrat à durée indéterminée",
-        "contrat a duree indeterminee",
+        "contrat a duree indeterminee", "خدام بلا عقد", "بلا عقد",
+        "عقد مكتوب", "preuve de l'existence du contrat de travail",
+        "preuve de relation de travail",
     ],
     "maternity_leave": [
-        "حمل", "المرأة الحامل", "الولادة", "عطلة الولادة",
+        "حمل", "المرأة الحامل", "الحامل", "مرضت بالحمل", "الولادة", "عطلة الولادة",
         "الحامل", "حماية الحامل", "حقوق المرأة الحامل",
         "maternité", "maternite", "congé de maternité",
         "grossesse", "salariée en état de grossesse",
@@ -100,8 +106,17 @@ LEGAL_TOPIC_TERMS = {
         "مفتش الشغل", "تفتيش الشغل", "النزاعات",
         "inspecteur du travail", "inspection du travail",
     ],
+    "work_accident": [
+        "حادث شغل", "حادثة شغل", "حادث داخل الخدمة",
+        "حادث فالخدمة", "حادث فالعمل", "طاح عليا شي حاجة فالخدمة",
+        "تكسرت فالخدمة", "تجرحت فالعمل", "accident de travail",
+        "accident du travail", "accidents du travail",
+        "maladie professionnelle", "risques professionnels",
+    ],
     "cnss": [
         "cnss", "الضمان الاجتماعي", "تصريح", "التصريح",
+        "ما تصرحتش", "ما تصرحش بيا", "ما مصرحش بيا", "مصرحش بيا",
+        "ما مسجلنيش", "ما مصرحش",
         "caisse nationale de sécurité sociale",
     ],
 }
@@ -115,6 +130,7 @@ TOPIC_ANCHORS = {
     "work_certificate": ("article 72", "certificat de travail"),
     "paid_leave": ("article 231", "congé annuel payé"),
     "contract": ("article 16", "durée déterminée", "durée indéterminée"),
+    "gross_misconduct": ("article 61", "article 62", "faute grave", "procès-verbal"),
     "maternity_leave": (
         "article 152",
         "article 159",
@@ -128,6 +144,118 @@ TOPIC_ANCHORS = {
     ),
     "working_time": ("durée du travail", "2288 heures"),
     "labor_inspection": ("inspection du travail", "inspecteur du travail"),
+    "cnss": ("caisse nationale de sécurité sociale", "sécurité sociale", "cotisations"),
+    "work_accident": (
+        "accident du travail",
+        "accidents du travail",
+        "maladie professionnelle",
+        "risques professionnels",
+        "article 340",
+        "article 341",
+    ),
+}
+
+LEGAL_CONCEPT_MAP = {
+    "حادث": [
+        "حادث شغل",
+        "accident de travail",
+        "accident du travail",
+        "إصابة مهنية",
+        "CNSS",
+        "تعويض",
+    ],
+    "طرد": [
+        "فصل",
+        "licenciement",
+        "تعويض",
+        "مسطرة تأديبية",
+        "محضر الاستماع",
+    ],
+    "طردوني": [
+        "فصل",
+        "licenciement",
+        "تعويض",
+        "مسطرة تأديبية",
+        "محضر الاستماع",
+    ],
+    "ما خلصنيش": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
+    "الصالير": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
+    "كونجي": [
+        "العطلة السنوية",
+        "congé annuel payé",
+    ],
+    "مرض": [
+        "شهادة طبية",
+        "maladie",
+        "absence pour maladie",
+    ],
+    "مرضت": [
+        "شهادة طبية",
+        "maladie",
+        "absence pour maladie",
+    ],
+    "ما تصرحتش": [
+        "CNSS",
+        "الضمان الاجتماعي",
+        "تصريح",
+    ],
+    "خدام بلا عقد": [
+        "contrat de travail",
+        "CDI",
+        "CDD",
+        "preuve de l'existence du contrat de travail",
+        "preuve de relation de travail",
+    ],
+    "الحامل": [
+        "protection de la maternité",
+        "grossesse",
+        "congé de maternité",
+    ],
+    "السوايع الزايدة": [
+        "heures supplémentaires",
+        "majoration de salaire",
+    ],
+    "شهادة العمل": [
+        "certificat de travail",
+    ],
+    "CNSS": [
+        "الضمان الاجتماعي",
+        "تصريح",
+        "تعويضات",
+    ],
+}
+
+LEGAL_CONCEPT_ALIASES = {
+    "طاح": "حادث",
+    "طحت": "حادث",
+    "طيحت": "حادث",
+    "تكسرت": "حادث",
+    "تكسر": "حادث",
+    "تجرحت": "حادث",
+    "جرح": "حادث",
+    "ماعطانيش الصالير": "ما خلصنيش",
+    "ما عطانيش الصالير": "ما خلصنيش",
+    "ماخلصنيش": "ما خلصنيش",
+    "الاجر": "الصالير",
+    "الأجر": "الصالير",
+    "الكونجي": "كونجي",
+    "رفض الكونجي": "كونجي",
+    "ما تصرحش بيا": "ما تصرحتش",
+    "ما مصرحش بيا": "ما تصرحتش",
+    "مصرحش بيا": "ما تصرحتش",
+    "بلا عقد": "خدام بلا عقد",
+    "خدام بلا كونطرا": "خدام بلا عقد",
+    "كونطرا": "خدام بلا عقد",
+    "سوايع زايدة": "السوايع الزايدة",
+    "ساعات إضافية": "السوايع الزايدة",
 }
 
 OUT_OF_SCOPE_TERMS = [
@@ -136,8 +264,23 @@ OUT_OF_SCOPE_TERMS = [
 ]
 
 WORK_RELATED_TERMS = [
-    "خدمة", "الشغل", "العمل", "عامل", "أجير", "اجير",
-    "employeur", "salarié", "travail"
+    "خدمة",
+    "الخدمة",
+    "فالخدمة",
+    "داخل الخدمة",
+    "الشغل",
+    "العمل",
+    "عامل",
+    "أجير",
+    "اجير",
+    "مشغل",
+    "شركة",
+    "حادث شغل",
+    "حادثة شغل",
+    "accident de travail",
+    "employeur",
+    "salarié",
+    "travail",
 ]
 
 CITATION_PATTERN = re.compile(r"\[المصدر\s+\d+،\s+الصفحة\s+[^\]]+\]")
@@ -165,6 +308,8 @@ class SourceChunk:
 
 
 def terminal_text(text: str):
+    if os.getenv("RAG_FORCE_ARABIC_RESHAPE") != "1":
+        return text
     if not arabic_reshaper or not get_display:
         return text
     return "\n".join(get_display(arabic_reshaper.reshape(line)) for line in text.splitlines())
@@ -186,9 +331,18 @@ def get_embedding(text: str):
 
 def is_obviously_out_of_scope(question: str) -> bool:
     normalized = question.lower()
-    has_out_scope = any(term in normalized for term in OUT_OF_SCOPE_TERMS)
-    has_work_term = any(term in normalized for term in WORK_RELATED_TERMS)
-    return has_out_scope and not has_work_term
+    has_out_scope = any(term.lower() in normalized for term in OUT_OF_SCOPE_TERMS)
+    has_work_context = any(term.lower() in normalized for term in WORK_RELATED_TERMS)
+    has_labor_topic = any(question_matches_topic(question, topic) for topic in LEGAL_TOPIC_TERMS)
+    mentions_accident = "حادث" in normalized or "accident" in normalized
+
+    if mentions_accident and has_work_context:
+        return False
+
+    if has_work_context or has_labor_topic:
+        return False
+
+    return has_out_scope
 
 
 def asks_for_specific_article(question: str) -> str | None:
@@ -211,8 +365,37 @@ def matched_topics(question: str) -> list[str]:
     ]
 
 
-def expand_legal_query(question: str) -> str:
+def expand_query(question: str) -> str:
+    """Append Darija legal concepts before retrieval while keeping the original text."""
     normalized = question.lower()
+    matched_concepts = []
+
+    for keyword in LEGAL_CONCEPT_MAP:
+        if keyword.lower() in normalized:
+            matched_concepts.append(keyword)
+
+    for alias, concept in LEGAL_CONCEPT_ALIASES.items():
+        if alias.lower() in normalized:
+            matched_concepts.append(concept)
+
+    expansions = []
+    for concept in dict.fromkeys(matched_concepts):
+        expansions.extend(LEGAL_CONCEPT_MAP.get(concept, []))
+
+    unique_expansions = []
+    for expansion in dict.fromkeys(expansions):
+        if expansion.lower() not in normalized:
+            unique_expansions.append(expansion)
+
+    if not unique_expansions:
+        return question
+
+    return f"{question} {' '.join(unique_expansions)}"
+
+
+def expand_legal_query(question: str) -> str:
+    expanded_question = expand_query(question)
+    normalized = expanded_question.lower()
     expansions = []
 
     for terms in LEGAL_TOPIC_TERMS.values():
@@ -220,10 +403,10 @@ def expand_legal_query(question: str) -> str:
             expansions.extend(terms)
 
     if not expansions:
-        return question
+        return expanded_question
 
     unique_expansions = list(dict.fromkeys(expansions))
-    return f"{question}\nFrench legal keywords: {'; '.join(unique_expansions)}"
+    return f"{expanded_question}\nFrench legal keywords: {'; '.join(unique_expansions)}"
 
 
 def anchor_score(text: str, question: str) -> int:
@@ -318,7 +501,10 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
     client = chromadb.PersistentClient(path=CHROMA_PATH)
     collection = client.get_collection(COLLECTION_NAME)
 
-    query_embedding = get_embedding(expand_legal_query(question))
+    expanded_question = expand_query(question)
+    if RAG_DEBUG:
+        terminal_print(f"Expanded query: {expanded_question}\n")
+    query_embedding = get_embedding(expand_legal_query(expanded_question))
 
     results = collection.query(
         query_embeddings=[query_embedding],
@@ -344,19 +530,20 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
             )
         )
 
-    chunks = add_keyword_results(collection, question, chunks)
+    chunks = add_keyword_results(collection, expanded_question, chunks)
     chunks = dedupe_chunks_by_page(chunks)
 
     chunks.sort(
         key=lambda chunk: (
-            anchor_score(chunk.text, question) + keyword_score(chunk.text, question),
+            anchor_score(chunk.text, expanded_question)
+            + keyword_score(chunk.text, expanded_question),
             0 if chunk.distance is None else -chunk.distance,
         ),
         reverse=True,
     )
 
-    selected = relevant_chunks(question, chunks)[:n_results]
-    return [
+    selected = relevant_chunks(expanded_question, chunks)[:n_results]
+    selected_chunks = [
         SourceChunk(
             number=index,
             page=chunk.page,
@@ -365,6 +552,10 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
         )
         for index, chunk in enumerate(selected, start=1)
     ]
+    if RAG_DEBUG:
+        pages = ", ".join(chunk.page for chunk in selected_chunks) or "none"
+        terminal_print(f"Retrieved pages: {pages}\n")
+    return selected_chunks
 
 
 def context_has_article(article_number: str, chunks: list[SourceChunk]) -> bool:
@@ -409,49 +600,118 @@ def conversation_router(question: str) -> str | None:
     if not normalized:
         return None
 
-    greetings = {"hi", "hello", "salam", "سلام", "السلام", "السلام عليكم", "bonjour"}
-    thanks = {"شكرا", "شكراً", "merci", "thanks", "thank you"}
-    goodbyes = {"bye", "باي", "مع السلامة", "إلى اللقاء", "الى اللقاء"}
+    greetings = {
+        "hi",
+        "hello",
+        "salam",
+        "سلام",
+        "السلام",
+        "السلام عليكم",
+        "bonjour",
+    }
+    thanks = {"شكرا", "شكراً", "merci", "thanks", "thank you", "بارك الله فيك"}
+    goodbyes = {"bye", "باي", "مع السلامة", "إلى اللقاء", "الى اللقاء", "سلام"}
     identities = {"شكون نتا", "شكون انت", "من انت", "who are you"}
     capabilities = {"شنو تقدر دير", "اش تقدر دير", "what can you do"}
     unclear_short = {"ok", "واش", "شنو"}
+    certainty_checks = {"واش متأكد", "متأكد", "are you sure", "واش نتيق فيك"}
+    explain_more = {"شرح ليا كثر", "زيد شرح", "فصل ليا", "explain more"}
+    examples = {"عطيني مثال", "مثال", "give me example"}
+    documents = {
+        "شنو نصيفط",
+        "شنو نرسل",
+        "شنو الوثائق",
+        "شنو خاصني نجمع",
+        "what should i send",
+    }
 
     if normalized in greetings:
-        return (
-            "سلام، مرحبا بيك. سولني على أي حاجة متعلقة بقانون الشغل المغربي: "
-            "الطرد، العقد، الأجر، العطلة، CNSS، أو التعويضات."
+        return random.choice(
+            [
+                "سلام، مرحبا بيك. سولني على أي حاجة متعلقة بقانون الشغل المغربي.",
+                "أهلا بيك. نقدر نعاونك فأسئلة قانون الشغل المغربي.",
+                "مرحبا، عطيني سؤالك المتعلق بالشغل وغادي نحاول نعاونك.",
+            ]
         )
 
     if normalized in thanks:
-        return (
-            "العفو. إلا بغيتي تسول على شي حالة فالشغل، عطيني التفاصيل "
-            "ونعاونك بالمعلومة القانونية المتوفرة."
+        return random.choice(
+            [
+                "العفو. إلا بغيتي شي توضيح آخر مرحبا.",
+                "مرحبا بيك، أي وقت.",
+                "العفو، نقدر نعاونك فأي سؤال متعلق بالشغل.",
+            ]
         )
 
     if normalized in goodbyes:
-        return "مع السلامة. إلا احتجتي شي معلومة على قانون الشغل، رجع سولني."
+        return random.choice(
+            [
+                "مع السلامة. إلا احتجتي شي معلومة على قانون الشغل، رجع سولني.",
+                "بسلامة، ومرحبا فاش تحتاج توضيح آخر.",
+                "الله يعاونك. أي سؤال متعلق بالشغل أنا هنا.",
+            ]
+        )
 
     if normalized in identities or (
         "شكون" in normalized and ("نتا" in normalized or "انت" in normalized)
     ):
-        return (
-            "أنا مساعد قانوني ذكي مخصص لمدونة الشغل المغربية. كنعاونك تفهم "
-            "حقوقك وواجباتك، ولكن ماشي محامي وما كنقدمش استشارة قانونية رسمية."
+        return random.choice(
+            [
+                "أنا مساعد قانوني ذكي مخصص لمدونة الشغل المغربية. كنشرح المعلومات بطريقة مبسطة، وماشي محامي.",
+                "أنا مساعد كيشرح قانون الشغل المغربي بطريقة مبسطة، مع الاعتماد على المصادر القانونية المتوفرة.",
+                "أنا AI قانوني متخصص فقانون الشغل المغربي. نعاونك تفهم الحقوق والواجبات، ولكن ما كنقدمش استشارة قانونية رسمية.",
+            ]
         )
 
     if normalized in capabilities or (
         "تقدر" in normalized and "دير" in normalized and "شنو" in normalized
     ):
+        return random.choice(
+            [
+                "نقدر نعاونك فمواضيع بحال الطرد، العقد، CNSS، الأجر، العطلة، والساعات الإضافية.",
+                "نشرح ليك حقوقك وواجباتك فقانون الشغل المغربي مع المصادر القانونية المتوفرة.",
+                "نقدر نجاوب على أسئلة مرتبطة بالشغل، التعويضات، العقود، المرض، العطلة، والأجر.",
+            ]
+        )
+
+    if normalized in certainty_checks or (
+        "متأكد" in normalized or "نثق" in normalized or "نتيق" in normalized
+    ):
+        return random.choice(
+            [
+                "الجواب كيبقى مبني غير على المصدر اللي لقيتو فمدونة الشغل. إلا بغيتي، عطيني تفاصيل أكثر باش نراجع الحالة بدقة.",
+                "كنحاول نربط كل جواب بالمصدر القانوني المتوفر. بلا وثائق الحالة، ما نقدرش نعطيك نتيجة نهائية.",
+                "متأكد من حدود الجواب: هو توجيه مبني على المصدر، وماشي استشارة قانونية رسمية.",
+            ]
+        )
+
+    if normalized in explain_more or ("شرح" in normalized and "كثر" in normalized):
         return (
-            "نقدر نشرح ليك مواضيع فمدونة الشغل بحال الطرد، العقد، الأجر، "
-            "الساعات الإضافية، العطلة، شهادة العمل، وغياب المرض. "
-            "ونحاول نعطيك المصدر القانوني إلا كان متوفر."
+            "نقدر نشرح أكثر، ولكن عطيني السؤال أو الحالة اللي بغيتي نفصل فيها: "
+            "الطرد، الأجر، العقد، العطلة، CNSS، ولا شي موضوع آخر فالشغل."
+        )
+
+    if normalized in examples:
+        return (
+            "مثال ديال سؤال واضح: واش المشغل يقدر يطردني بلا سبب؟ "
+            "أو: شنو ندير إلا ما خلصنيش الصالير؟"
+        )
+
+    if normalized in documents or (
+        "وثائق" in normalized or "نصيفط" in normalized or "نجمع" in normalized
+    ):
+        return (
+            "غالبا جمع العقد أو ما يثبت الخدمة، كشوفات الأداء، الرسائل، محضر الاستماع إن وجد، "
+            "وأي وثيقة فيها التاريخ والسبب. ومن بعد سولني على الحالة بالتفاصيل."
         )
 
     if normalized in unclear_short:
-        return (
-            "مرحبا، كتب ليا سؤالك بشوية ديال التفاصيل باش نقدر نعاونك مزيان "
-            "فموضوع متعلق بالشغل."
+        return random.choice(
+            [
+                "كتب ليا السؤال بشوية ديال التفاصيل باش نقدر نعاونك مزيان.",
+                "عطيني شوية تفاصيل: واش السؤال على العقد، الأجر، الطرد، العطلة، ولا شي موضوع آخر فالشغل؟",
+                "مازال السؤال ناقص شوية. شرح ليا الحالة ديالك فالشغل ونحاول نعطيك جواب واضح.",
+            ]
         )
 
     return None
@@ -505,11 +765,14 @@ def verified_source_subset(question: str, chunks: list[SourceChunk]) -> list[Sou
         "work_certificate": {"38"},
         "sick_leave": {"98"},
         "termination": {"34", "35"},
+        "gross_misconduct": {"26", "34"},
         "preavis": {"31"},
         "paid_leave": {"88"},
-        "contract": {"18"},
+        "contract": {"18", "19"},
         "maternity_leave": {"64", "65", "66"},
         "notice_job_search": {"30", "31"},
+        "work_accident": {"32", "118"},
+        "cnss": {"45", "129"},
     }
 
     keep_pages = set()
@@ -527,6 +790,66 @@ def answer_from_verified_rules(question: str, chunks: list[SourceChunk]) -> str 
 
     context = "\n".join(chunk.text for chunk in chunks).lower()
     first_source = first_citation(chunks)
+
+    if question_matches_topic(question, "work_accident") and "accident du travail" in context:
+        first_source = citation_for_match(chunks, "accident du travail")
+        return brief_answer(
+            "إلا وقع ليك حادث داخل الخدمة، المصدر كيهضر على توثيق ظروف حادث الشغل وإرسال تقرير للجهات المختصة.",
+            [
+                "خاص التقرير يبين ظروف الحادث أو المرض المهني.",
+                "المصدر كيهضر على إرسال نسخة داخل 15 يوم من بعد الحادث أو constat ديال المرض المهني.",
+            ],
+            first_source,
+            "عمليا، جمع الشهادة الطبية، أي شهود أو صور، وأي مراسلة مع المشغل.",
+        )
+
+    if question_matches_topic(question, "gross_misconduct") and contains_all(
+        context,
+        "article 61",
+        "article 62",
+    ):
+        first_source = citation_for_match(chunks, "article 62")
+        return brief_answer(
+            "فالخطأ الجسيم، المدونة كتربط الفصل بمسطرة خاصة، وماشي غير قرار شفوي.",
+            [
+                "Article 61 كيهضر على إمكانية الفصل بلا préavis ولا تعويض فحالة الخطأ الجسيم.",
+                "قبل الفصل، خاص الأجير يقدر يدافع على راسو ويتسمع ليه، ويتدار محضر.",
+            ],
+            first_source,
+            "عمليا، طلب نسخة من محضر الاستماع وسبب الفصل المكتوب واحتافظ بأي مراسلة.",
+        )
+
+    if question_matches_topic(question, "contract") and (
+        "preuve de l'existence du contrat de travail" in context
+        or "peut être rapportée par tous les moyens" in context
+    ):
+        first_source = citation_for_match(chunks, "article 18")
+        if "بلا عقد" in question or "كونطرا" in question:
+            return brief_answer(
+                "إلا كنت خدام بلا عقد مكتوب، هادشي ما كيعنيش بالضرورة ما كايناش علاقة شغل.",
+                [
+                    "المصدر كينص أن إثبات وجود عقد الشغل يمكن يكون بجميع وسائل الإثبات.",
+                    "العقد المكتوب مفيد، ولكن الإثبات ماشي محصور فيه فقط.",
+                ],
+                first_source,
+                "عمليا، جمع كشوفات الأداء، الرسائل، الشهود، بطاقة العمل إن وجدت، وأي دليل على الخدمة.",
+            )
+
+    if question_matches_topic(question, "cnss") and contains_all(
+        context,
+        "caisse nationale",
+        "sécurité sociale",
+    ):
+        first_source = citation_for_match(chunks, "caisse nationale")
+        return brief_answer(
+            "المصدر المتوفر كيهضر على CNSS والاشتراكات، ولكن ما فيهش تفاصيل كافية باش نشرح مسطرة عدم التصريح كاملة.",
+            [
+                "نقدر نقول غير أن CNSS واردة فالسياق ديال الالتزامات والوثائق المرتبطة بالشغل.",
+                "باش نعطيك جواب أدق على عدم التصريح، خاص مصدر CNSS مباشر أو وثائق الحالة.",
+            ],
+            first_source,
+            "عمليا، جمع العقد أو ما يثبت الخدمة، كشوفات الأداء، ورقم CNSS إلا كان عندك.",
+        )
 
     if question_matches_topic(question, "paid_leave") and "article 231" in context:
         first_source = citation_for_match(chunks, "article 231")
@@ -734,6 +1057,24 @@ Articles 61 و62 من مدونة الشغل. {first_source}
 تنبيه:
 هاد الجواب للمعلومة فقط وماشي استشارة قانونية رسمية.
 """.strip()
+
+    if (
+        question_matches_topic(question, "termination")
+        and "licenciement" in context
+        and "34" in source_pages(chunks)
+    ):
+        first_source = next(
+            chunk.citation for chunk in chunks if chunk.page == "34"
+        )
+        return brief_answer(
+            "إلا قالو ليك طردوني، خاصنا نشوفو السبب والمسطرات قبل أي خلاصة.",
+            [
+                "قرار الفصل خاصو يذكر الأسباب، وكيبان فالسياق أن الاستماع والمحضر مهمين فمسطرة الفصل.",
+                "ما نقدرش نأكد واش الطرد قانوني أو لا بلا وثائق الحالة.",
+            ],
+            first_source,
+            "عمليا، جمع رسالة الطرد، محضر الاستماع، العقد، وكشوفات الأداء.",
+        )
 
     if question_matches_topic(question, "preavis") and contains_all(
         context,
@@ -954,9 +1295,10 @@ def context_is_sufficient(question: str, chunks: list[SourceChunk]) -> bool:
     if not chunks:
         return False
 
+    expanded_question = expand_query(question)
     return any(
-        keyword_score(chunk.text, question) >= MIN_RELEVANCE_SCORE
-        or anchor_score(chunk.text, question) > 0
+        keyword_score(chunk.text, expanded_question) >= MIN_RELEVANCE_SCORE
+        or anchor_score(chunk.text, expanded_question) > 0
         for chunk in chunks
     )
 
@@ -1065,11 +1407,11 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
             "messages": messages,
             "stream": False,
             "options": {
-                "temperature": 0.0,
-                "top_p": 0.7,
+                "temperature": 0.25,
+                "top_p": 0.8,
                 "num_ctx": 4096,
-                "num_predict": 650,
-                "repeat_penalty": 1.15,
+                "num_predict": 420,
+                "repeat_penalty": 1.12,
                 "num_thread": 8,
             },
         },
@@ -1117,6 +1459,8 @@ if __name__ == "__main__":
             continue
 
         try:
+            if conversation_router(question) is None:
+                terminal_print("خود لحظة، غادي نقلب ليك فالمصدر القانوني...")
             answer, sources = ask_chatbot(question, return_sources=True)
 
             print("=" * 50)

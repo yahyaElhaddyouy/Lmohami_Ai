@@ -1,0 +1,41 @@
+{
+  "format": "jsonl",
+  "schema": [
+    "instruction",
+    "input",
+    "output"
+  ],
+  "task": "Moroccan Darija labor-law intent classification",
+  "country_scope": "Morocco",
+  "intents": [
+    "CNSS",
+    "annual_leave",
+    "certificates",
+    "contracts",
+    "disciplinary_procedures",
+    "dismissal",
+    "maternity",
+    "overtime",
+    "resignation",
+    "salary",
+    "work_accidents"
+  ],
+  "intent_count": 11,
+  "training_records": 133,
+  "evaluation_records": 33,
+  "total_records": 166,
+  "records_per_intent": {
+    "CNSS": 15,
+    "annual_leave": 15,
+    "certificates": 15,
+    "contracts": 15,
+    "disciplinary_procedures": 15,
+    "dismissal": 16,
+    "maternity": 15,
+    "overtime": 15,
+    "resignation": 15,
+    "salary": 15,
+    "work_accidents": 15
+  },
+  "qlora_note": "Use instruction/input/output as supervised fine-tuning text. Outputs are canonical intent labels, not legal advice."
+}

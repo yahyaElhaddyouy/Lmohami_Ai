@@ -33,11 +33,7 @@ class ChatApiService {
       final response = await _client
           .post(
             ApiConfig.chatUri,
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-              'ngrok-skip-browser-warning': 'true',
-            },
+            headers: ApiConfig.jsonHeaders,
             body: requestBody,
           )
           .timeout(ApiConfig.requestTimeout);
@@ -101,6 +97,18 @@ class ChatApiService {
       throw const ChatApiException(
         'وقع مشكل غير متوقع فالاتصال. شوف Flutter console logs وعاود جرّب.',
       );
+    }
+  }
+
+  Future<bool> checkHealth() async {
+    try {
+      final response = await _client
+          .get(ApiConfig.healthUri, headers: ApiConfig.jsonHeaders)
+          .timeout(const Duration(seconds: 8));
+      return response.statusCode >= 200 && response.statusCode < 300;
+    } catch (error, stackTrace) {
+      _logException(error, stackTrace);
+      return false;
     }
   }
 

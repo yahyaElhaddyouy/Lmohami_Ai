@@ -24,6 +24,8 @@ class Lmo7amiApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
       ],
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system,
       builder: (context, child) {
         return Directionality(
           textDirection: TextDirection.rtl,

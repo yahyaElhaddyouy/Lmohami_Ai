@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../models/chat_message.dart';
 import '../theme/app_theme.dart';
@@ -67,6 +68,27 @@ class MessageBubble extends StatelessWidget {
                     fontWeight: isUser ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
+              if (!message.isLoading && !message.isUser && !message.isError) ...[
+                const SizedBox(height: 8),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    tooltip: 'نسخ الجواب',
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: message.text));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('تنسخ الجواب'),
+                          duration: Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.copy_rounded, size: 18),
+                    color: AppTheme.textMuted,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                ),
+              ],
               if (message.sources.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Wrap(

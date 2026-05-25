@@ -1,10 +1,105 @@
-{"id":"licenciement_sans_motif","question":"شنو الحقوق ديالي إلا طردني المشغل بلا سبب؟","required_terms":["طرد","المصدر"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
-{"id":"certificat_travail","question":"واش عندي الحق فشهادة العمل من بعد ما نخرج من الخدمة؟","required_terms":["شهادة","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
-{"id":"preavis","question":"شنو هو préavis فمدونة الشغل؟","required_terms":["المصدر"],"forbidden_terms":["أكيد"],"min_sources":1}
-{"id":"conge_annuel","question":"شحال عندي من نهار ديال الكونجي السنوي؟","required_terms":["العطلة","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
-{"id":"maladie_certificat","question":"واش المشغل يقدر يمنعني من الغياب بسبب المرض إلا عندي شهادة طبية؟","required_terms":["مرض","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
-{"id":"article_impossible","question":"شنو كتنص عليه المادة 999 من مدونة الشغل؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 999 تنص"],"min_sources":0}
-{"id":"hors_scope_divorce","question":"كيفاش ندير طلاق اتفاقي؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["محكمة الأسرة"],"min_sources":0}
-{"id":"salaire_non_paye","question":"شنو ندير إلا المشغل ما خلصنيش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
-{"id":"heures_supp","question":"واش الساعات الإضافية خاصها تخلص؟","required_terms":["الساعات","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
-{"id":"cdd_cdi","question":"شنو الفرق بين CDD و CDI؟","required_terms":["العقد","المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_001","question":"شنو الحقوق ديالي إلا طردني المشغل بلا سبب؟","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
+{"id":"termination_002","question":"طردوني من الخدمة شنو ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد"],"min_sources":1}
+{"id":"termination_003","question":"المشغل خرجني بلا ما يسمع ليا واش قانوني؟","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد"],"min_sources":1}
+{"id":"termination_004","question":"واش الطرد بلا سبب مقبول فمدونة الشغل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_005","question":"قالو ليا سير بحالك بلا ورقة الطرد","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":1}
+{"id":"termination_006","question":"بغيت نعرف واش خاص محضر الاستماع قبل الفصل","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_007","question":"طردوني تأديبيا واش خاص يسمعو ليا؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_008","question":"شنو المسطرة قبل الطرد فالشغل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_009","question":"واش قرار الفصل خاصو يكون فيه السبب؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"termination_010","question":"شنو الوثائق اللي نجمع إلا طردوني؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"gross_misconduct_001","question":"شنو هو الخطأ الجسيم؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"gross_misconduct_002","question":"إلا قالو عندي خطأ جسيم واش كاين préavis؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"gross_misconduct_003","question":"الخطأ الجسيم واش كيحيد التعويض؟","required_terms":["المصدر"],"forbidden_terms":["أكيد"],"min_sources":1}
+{"id":"gross_misconduct_004","question":"واش خاص محضر الاستماع فالخطأ الجسيم؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"gross_misconduct_005","question":"المشغل قال ليا faute grave شنو خاصني نعرف؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_001","question":"شنو ندير إلا المشغل ما خلصنيش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_002","question":"ماعطانيش الصالير هاد الشهر","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد"],"min_sources":1}
+{"id":"salary_003","question":"واش عدم أداء الأجر مخالفة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_004","question":"الصالير تأخر بزاف شنو ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_005","question":"ما خلصنيش المشغل واش عندي حق؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_006","question":"المشغل نقص ليا فالصالير بلا شرح","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_007","question":"شنو الدليل اللي نجمع إلا ما خلصنيش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_008","question":"واش خاص الأجر يتخلص بانتظام؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_009","question":"أجري ما توصلتش به شنو المعمول؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"salary_010","question":"الخلاص ديالي بقا عند الشركة","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_001","question":"شحال عندي من نهار ديال الكونجي السنوي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_002","question":"رفض الكونجي ديالي شنو ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_003","question":"واش العطلة السنوية كتخلص؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_004","question":"خدمت ستة شهور واش عندي كونجي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_005","question":"الكونجي كيتحسب كيفاش فمدونة الشغل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_006","question":"الأجير أقل من 18 عام شحال عندو من عطلة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_007","question":"العطلة السنوية نهار ونص واش صحيحة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_008","question":"واش عندي الحق فالعطلة من بعد 6 شهور؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_009","question":"بغيت نفهم congé annuel payé","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"leave_010","question":"شنو كتعني العطلة السنوية المؤدى عنها؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_001","question":"واش الساعات الإضافية خاصها تخلص؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_002","question":"السوايع الزايدة واش فيها زيادة فالصالير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_003","question":"خدمت أكثر من الوقت العادي شنو حقي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_004","question":"heures supplémentaires فمدونة الشغل شنو هي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_005","question":"واش الخدمة فالراحة الأسبوعية كتزاد فالأجر؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_006","question":"شنو هي majoration ديال الساعات الإضافية؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_007","question":"خدمت بالليل ساعات إضافية واش كتخلص أكثر؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"overtime_008","question":"شنو ندير إلا ما خلصونيش السوايع الزايدة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_001","question":"واش المشغل يقدر يمنعني من الغياب بسبب المرض إلا عندي شهادة طبية؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_002","question":"مرضت وغيبت شنو خاصني ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_003","question":"شهادة طبية خاصها تتعطى للمشغل فوقاش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_004","question":"غبت بالمرض أكثر من أربعة أيام","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_005","question":"واش خاصني نخبر المشغل بالمرض ف48 ساعة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_006","question":"certificat médical فالخدمة شنو الدور ديالو؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"sick_007","question":"المشغل بغا يدير فحص مضاد فالمرض","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_001","question":"شنو الفرق بين CDD و CDI؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_002","question":"خدام بلا عقد شنو الحقوق ديالي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_003","question":"بلا كونطرا واش نقدر نثبت الخدمة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_004","question":"واش عقد الشغل خاصو يكون مكتوب؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_005","question":"CDD شنو الحالات ديالو؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_006","question":"CDI كيعني شنو؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_007","question":"واش CDD يقدر يولي CDI؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_008","question":"عندي عقد محدد المدة وبقى مستمر","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_009","question":"proof ديال relation de travail شنو ممكن يكون؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"contract_010","question":"واش يمكن إثبات عقد الشغل بجميع الوسائل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"certificate_001","question":"واش عندي الحق فشهادة العمل من بعد ما نخرج من الخدمة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"certificate_002","question":"شهادة العمل خاصها تعطى فوقاش؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"certificate_003","question":"المشغل ما عطانيش شهادة الشغل","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"certificate_004","question":"شنو خاص يكون فcertificat de travail؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"certificate_005","question":"واش شهادة العمل فيها تاريخ الدخول والخروج؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maternity_001","question":"واش الحامل عندها حماية من الطرد؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maternity_002","question":"حقوق المرأة الحامل فالخدمة شنو هي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maternity_003","question":"congé de maternité شحال مدتو؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maternity_004","question":"المشغل بغا يطردني وأنا حامل","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"maternity_005","question":"الحمل مثبت بشهادة طبية واش كاينة حماية؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"preavis_001","question":"شنو هو préavis فمدونة الشغل؟","required_terms":["المصدر"],"forbidden_terms":["أكيد"],"min_sources":1}
+{"id":"preavis_002","question":"مدة الإخطار قبل الطرد شنو هي؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"preavis_003","question":"واش عدم احترام préavis فيه تعويض؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"preavis_004","question":"indemnité de préavis شنو معناها؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"preavis_005","question":"واش كاين préavis ف CDI؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_001","question":"أنا وقع ليا حادث داخل الخدمة","required_terms":["المصدر"],"forbidden_terms":["نضمن","أكيد"],"min_sources":1}
+{"id":"accident_002","question":"طاح عليا شي حاجة فالخدمة","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_003","question":"تكسرت فالخدمة شنو ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_004","question":"تجرحت فالعمل واش هادشي حادث شغل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_005","question":"شنو الحقوق ديالي إلا وقع ليا حادث شغل؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_006","question":"accident de travail فالشركة شنو خاص يتدار؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_007","question":"حادث داخل العمل واش خاص تقرير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"accident_008","question":"مرض مهني ولا حادث شغل شنو الفرق؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"cnss_001","question":"ما تصرحتش ف CNSS شنو ندير؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"cnss_002","question":"المشغل ما مصرحش بيا فالضمان الاجتماعي","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"cnss_003","question":"CNSS والتصريح فالخدمة شنو العلاقة؟","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"cnss_004","question":"ما مسجلنيش فالصندوق الوطني للضمان الاجتماعي","required_terms":["المصدر"],"forbidden_terms":["نضمن"],"min_sources":1}
+{"id":"out_scope_001","question":"كيفاش ندير طلاق اتفاقي؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["محكمة الأسرة"],"min_sources":0}
+{"id":"out_scope_002","question":"بغيت نعرف شنو ندير فحادثة سير فالطريق العام؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["مدونة السير"],"min_sources":0}
+{"id":"out_scope_003","question":"مول الدار بغا يخرجني من الكراء","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["كراء"],"min_sources":0}
+{"id":"out_scope_004","question":"كيفاش نرفع دعوى تجارية؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المحكمة التجارية"],"min_sources":0}
+{"id":"out_scope_005","question":"شنو ندير فالإرث؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["الورثة"],"min_sources":0}
+{"id":"out_scope_006","question":"بغيت نسجل شركة تجارية","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["السجل التجاري"],"min_sources":0}
+{"id":"out_scope_007","question":"عندي مشكل مع الجار","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["الجيران"],"min_sources":0}
+{"id":"out_scope_008","question":"عندي مخالفة فالطريق","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["مدونة السير"],"min_sources":0}
+{"id":"out_scope_009","question":"كيفاش ندير فيزا لفرنسا؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["القنصلية"],"min_sources":0}
+{"id":"out_scope_010","question":"شنو ندير فملف جنائي؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["القانون الجنائي"],"min_sources":0}
+{"id":"article_001","question":"شنو كتنص عليه المادة 999 من مدونة الشغل؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 999 تنص"],"min_sources":0}
+{"id":"article_002","question":"شرح ليا article 1365 فمدونة الشغل","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["article 1365"],"min_sources":0}
+{"id":"article_003","question":"شنو كتعني المادة 777 من قانون الشغل؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 777"],"min_sources":0}
+{"id":"article_004","question":"واش المادة 888 كتضمن ليا الربح؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["نضمن","أكيد تربح"],"min_sources":0}
+{"id":"article_005","question":"عطيني حكم المادة 1234 من مدونة الشغل","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 1234"],"min_sources":0}
+{"id":"article_006","question":"article 999 فيه تعويض كبير؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["تعويض كبير"],"min_sources":0}
+{"id":"article_007","question":"شنو كاين فالمادة 0 من مدونة الشغل؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["المادة 0"],"min_sources":0}
+{"id":"article_008","question":"واش المادة 9999 كتسمح بالطرد؟","expect_refusal":true,"required_terms":["ما لقيتش"],"forbidden_terms":["كتسمح"],"min_sources":0}
