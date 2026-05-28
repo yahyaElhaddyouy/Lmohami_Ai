@@ -177,6 +177,9 @@ def chat(request: ChatRequest):
             {
                 "number": source.number,
                 "page": source.page,
+                "category": source.category,
+                "source": source.source,
+                "source_type": source.source_type,
             }
             for source in sources
         ],

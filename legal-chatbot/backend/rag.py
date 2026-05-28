@@ -7,6 +7,11 @@ from dataclasses import dataclass
 import chromadb
 import requests
 
+from darija_intent import (
+    detect_darija_intent,
+    direct_answer_for_intent,
+)
+
 try:
     import arabic_reshaper
     from bidi.algorithm import get_display
@@ -15,8 +20,8 @@ except ImportError:
     get_display = None
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CHROMA_PATH = os.path.join(BASE_DIR, "chroma_db")
-COLLECTION_NAME = "code_travail_maroc"
+CHROMA_PATH = os.getenv("CHROMA_PATH", os.path.join(BASE_DIR, "chroma_db"))
+COLLECTION_NAME = os.getenv("CHROMA_COLLECTION", "legal_sources")
 
 OLLAMA_EMBED_URL = os.getenv("OLLAMA_EMBED_URL", "http://localhost:11434/api/embeddings")
 OLLAMA_CHAT_URL = os.getenv("OLLAMA_CHAT_URL", "http://localhost:11434/api/chat")
@@ -43,6 +48,7 @@ LEGAL_TOPIC_TERMS = {
         "الأجر", "اجر", "أجرة", "الصالير", "السالير", "خلصني",
         "ما خلصنيش", "ما تخلصتش", "ماعطانيش الصالير", "ما عطانيش الصالير",
         "الخلاص", "عدم أداء الأجر",
+        "أجري", "اجري", "ما توصلتش", "بقا عند الشركة",
         "أجر غير مؤدى", "salaire", "rémunération", "remuneration",
         "paiement du salaire", "défaut de paiement du salaire",
     ],
@@ -58,6 +64,7 @@ LEGAL_TOPIC_TERMS = {
     ],
     "termination": [
         "طرد", "طردوني", "فصل", "خروج", "بلا سبب", "سبب مقبول",
+        "خرجني", "خرجوني", "سير بحالك", "ما يسمع ليا",
         "licenciement", "indemnité de licenciement",
         "dommages-intérêts", "تعويض", "الفصل",
     ],
@@ -84,7 +91,7 @@ LEGAL_TOPIC_TERMS = {
         "contrat a duree determinee", "contrat à durée indéterminée",
         "contrat a duree indeterminee", "خدام بلا عقد", "بلا عقد",
         "عقد مكتوب", "preuve de l'existence du contrat de travail",
-        "preuve de relation de travail",
+        "preuve de relation de travail", "proof", "relation de travail",
     ],
     "maternity_leave": [
         "حمل", "المرأة الحامل", "الحامل", "مرضت بالحمل", "الولادة", "عطلة الولادة",
@@ -214,6 +221,49 @@ LEGAL_CONCEPT_MAP = {
         "preuve de l'existence du contrat de travail",
         "preuve de relation de travail",
     ],
+    "relation de travail": [
+        "contrat de travail",
+        "preuve de l'existence du contrat de travail",
+        "preuve de relation de travail",
+    ],
+    "proof": [
+        "contrat de travail",
+        "preuve de l'existence du contrat de travail",
+        "preuve de relation de travail",
+    ],
+    "خرجني": [
+        "فصل",
+        "licenciement",
+        "تعويض",
+        "مسطرة الفصل",
+        "محضر الاستماع",
+    ],
+    "ما يسمع ليا": [
+        "فصل",
+        "licenciement",
+        "مسطرة الفصل",
+        "محضر الاستماع",
+    ],
+    "أجري": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
+    "اجري": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
+    "ما توصلتش": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
+    "بقا عند الشركة": [
+        "الأجر",
+        "salaire",
+        "défaut de paiement du salaire",
+    ],
     "الحامل": [
         "protection de la maternité",
         "grossesse",
@@ -300,11 +350,38 @@ class SourceChunk:
     number: int
     page: str
     text: str
+    source: str = "unknown"
+    category: str = "unknown"
+    source_type: str = "unknown"
     distance: float | None = None
 
     @property
     def citation(self) -> str:
         return f"[المصدر {self.number}، الصفحة {self.page}]"
+
+    @property
+    def source_label(self) -> str:
+        if self.category == "unknown" and self.source == "unknown":
+            return "unknown"
+        return f"{self.category}/{self.source}"
+
+
+def source_chunk_from_metadata(
+    number: int,
+    document: str,
+    metadata: dict,
+    distance: float | None = None,
+) -> SourceChunk:
+    metadata = metadata or {}
+    return SourceChunk(
+        number=number,
+        page=str(metadata.get("page", "unknown")),
+        text=document.strip().replace("\n\n", "\n"),
+        source=str(metadata.get("source", "unknown")),
+        category=str(metadata.get("category", "unknown")),
+        source_type=str(metadata.get("source_type", "unknown")),
+        distance=distance,
+    )
 
 
 def terminal_text(text: str):
@@ -363,6 +440,25 @@ def matched_topics(question: str) -> list[str]:
         for topic in LEGAL_TOPIC_TERMS
         if question_matches_topic(question, topic)
     ]
+
+
+def is_explicit_cnss_question(question: str) -> bool:
+    normalized = question.lower()
+    explicit_terms = (
+        "cnss",
+        "الضمان",
+        "الضمان الاجتماعي",
+        "الصندوق الوطني",
+        "مصرح",
+        "مصرحين",
+        "مصرحش",
+        "تصرح",
+        "تصرحت",
+        "مسجل",
+        "مسجلني",
+        "cotisation",
+    )
+    return any(term in normalized for term in explicit_terms)
 
 
 def expand_query(question: str) -> str:
@@ -438,18 +534,19 @@ def keyword_score(text: str, query: str) -> int:
 
 
 def dedupe_chunks_by_page(chunks: list[SourceChunk]) -> list[SourceChunk]:
-    """Keep the strongest chunk per page so returned sources stay useful."""
+    """Keep the strongest chunk per source page so returned sources stay useful."""
     best_by_page = {}
     for chunk in chunks:
-        current = best_by_page.get(chunk.page)
+        key = (chunk.category, chunk.source, chunk.page)
+        current = best_by_page.get(key)
         if current is None:
-            best_by_page[chunk.page] = chunk
+            best_by_page[key] = chunk
             continue
 
         current_distance = float("inf") if current.distance is None else current.distance
         next_distance = float("inf") if chunk.distance is None else chunk.distance
         if next_distance < current_distance:
-            best_by_page[chunk.page] = chunk
+            best_by_page[key] = chunk
 
     return list(best_by_page.values())
 
@@ -484,10 +581,10 @@ def add_keyword_results(collection, question: str, existing: list[SourceChunk]) 
             continue
 
         chunks.append(
-            SourceChunk(
+            source_chunk_from_metadata(
                 number=len(chunks) + 1,
-                page=str(meta.get("page", "unknown")),
-                text=clean_doc,
+                document=clean_doc,
+                metadata=meta,
                 distance=None,
             )
         )
@@ -518,14 +615,13 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
 
     chunks = []
     for index, (doc, meta) in enumerate(zip(documents, metadatas), start=1):
-        clean_doc = doc.strip().replace("\n\n", "\n")
         distance = distances[index - 1] if index - 1 < len(distances) else None
 
         chunks.append(
-            SourceChunk(
+            source_chunk_from_metadata(
                 number=index,
-                page=str(meta.get("page", "unknown")),
-                text=clean_doc,
+                document=doc,
+                metadata=meta,
                 distance=distance,
             )
         )
@@ -535,6 +631,7 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
 
     chunks.sort(
         key=lambda chunk: (
+            source_category_score(chunk, question),
             anchor_score(chunk.text, expanded_question)
             + keyword_score(chunk.text, expanded_question),
             0 if chunk.distance is None else -chunk.distance,
@@ -548,13 +645,18 @@ def retrieve_law(question: str, n_results: int = N_RESULTS) -> list[SourceChunk]
             number=index,
             page=chunk.page,
             text=chunk.text,
+            source=chunk.source,
+            category=chunk.category,
+            source_type=chunk.source_type,
             distance=chunk.distance,
         )
         for index, chunk in enumerate(selected, start=1)
     ]
     if RAG_DEBUG:
-        pages = ", ".join(chunk.page for chunk in selected_chunks) or "none"
-        terminal_print(f"Retrieved pages: {pages}\n")
+        sources = ", ".join(
+            f"{chunk.source_label} p{chunk.page}" for chunk in selected_chunks
+        ) or "none"
+        terminal_print(f"Retrieved sources: {sources}\n")
     return selected_chunks
 
 
@@ -572,6 +674,41 @@ def context_has_article(article_number: str, chunks: list[SourceChunk]) -> bool:
 
 def contains_all(context: str, *terms: str) -> bool:
     return all(term.lower() in context for term in terms)
+
+
+def chunk_has_category(chunk: SourceChunk, category: str) -> bool:
+    chunk_category = getattr(chunk, "category", None)
+    if isinstance(chunk_category, str) and chunk_category.lower() == category.lower():
+        return True
+
+    metadata = getattr(chunk, "metadata", None)
+    if isinstance(metadata, dict):
+        metadata_category = metadata.get("category")
+        return (
+            isinstance(metadata_category, str)
+            and metadata_category.lower() == category.lower()
+        )
+
+    return False
+
+
+def has_source_category(chunks: list[SourceChunk], category: str) -> bool:
+    return any(chunk_has_category(chunk, category) for chunk in chunks)
+
+
+def source_category_score(chunk: SourceChunk, question: str) -> int:
+    score = 0
+    if is_explicit_cnss_question(question) and chunk_has_category(chunk, "cnss"):
+        score += 3
+    if question_matches_topic(question, "work_accident") and chunk_has_category(
+        chunk, "work_accident"
+    ):
+        score += 3
+    if question_matches_topic(question, "labor_inspection") and chunk_has_category(
+        chunk, "labor_inspection"
+    ):
+        score += 2
+    return score
 
 
 def first_citation(chunks: list[SourceChunk]) -> str:
@@ -592,6 +729,74 @@ def refusal_answer() -> str:
 
 def normalize_conversation_text(text: str) -> str:
     return re.sub(r"[^\w\u0600-\u06FF]+", " ", text.lower()).strip()
+
+
+def has_legal_context_in_conversation(text: str) -> bool:
+    normalized = normalize_conversation_text(text)
+    legal_markers = (
+        "خدمة",
+        "الشغل",
+        "عمل",
+        "مشغل",
+        "أجير",
+        "اجير",
+        "طرد",
+        "خرجني",
+        "فصل",
+        "أجر",
+        "اجر",
+        "صالير",
+        "خلاص",
+        "خلص",
+        "عقد",
+        "كونطرا",
+        "كونجي",
+        "مرض",
+        "حادث",
+        "cnss",
+        "ضمان",
+        "سوايع",
+        "شركة",
+        "وثائق",
+        "دليل",
+        "إثبات",
+        "اثبات",
+        "accident",
+        "travail",
+        "company",
+        "relation de travail",
+        "proof",
+    )
+    return any(marker in normalized for marker in legal_markers)
+
+
+def has_clear_out_of_scope_context(text: str) -> bool:
+    normalized = normalize_conversation_text(text)
+    out_of_scope_markers = (
+        "طلاق",
+        "كراء",
+        "كريت",
+        "مول الدار",
+        "الدار",
+        "الجار",
+        "حادثة سير",
+        "حادثه سير",
+        "الطريق",
+        "جنائي",
+        "إرث",
+        "ارث",
+        "تجارية",
+        "فيزا",
+    )
+    return any(marker in normalized for marker in out_of_scope_markers)
+
+
+def should_treat_as_native_direct_answer(question: str, intent_result) -> bool:
+    if intent_result.intent == "out_of_scope" and has_clear_out_of_scope_context(question):
+        return True
+    if intent_result.intent == "out_of_scope" and has_legal_context_in_conversation(question):
+        return False
+    return True
 
 
 def conversation_router(question: str) -> str | None:
@@ -697,9 +902,10 @@ def conversation_router(question: str) -> str | None:
             "أو: شنو ندير إلا ما خلصنيش الصالير؟"
         )
 
-    if normalized in documents or (
+    asks_for_documents = normalized in documents or (
         "وثائق" in normalized or "نصيفط" in normalized or "نجمع" in normalized
-    ):
+    )
+    if asks_for_documents and not has_legal_context_in_conversation(normalized):
         return (
             "غالبا جمع العقد أو ما يثبت الخدمة، كشوفات الأداء، الرسائل، محضر الاستماع إن وجد، "
             "وأي وثيقة فيها التاريخ والسبب. ومن بعد سولني على الحالة بالتفاصيل."
@@ -718,22 +924,116 @@ def conversation_router(question: str) -> str | None:
 
 
 def should_use_full_structure(question: str) -> bool:
-    """Use the longer layout only when the question needs several legal steps."""
-    normalized = question.lower()
-    complex_markers = (
-        "كيفاش",
-        "شنو ندير",
-        "شنو الحقوق",
-        "شنو خاص",
-        "الفرق بين",
-        "يتحسب",
-        "المسطرة",
-        "الوثائق",
-        "تعويض",
-        "articles",
-        "المادة",
+    """Verified legal answers now use one complete compact layout."""
+    return False
+
+
+def uncertainty_confidence(question: str, intent) -> str:
+    """Map detector confidence to a small label used by prompts and safeguards."""
+    detector_confidence = getattr(intent, "confidence", 1.0)
+    if detector_confidence >= 0.8:
+        return "high"
+    if detector_confidence >= 0.55:
+        return "medium"
+    return "low"
+
+
+def build_clarification_question(intent) -> str:
+    intent_name = getattr(intent, "intent", str(intent))
+    questions = {
+        "dismissal": "واش عطاوك سبب مكتوب ولا غير شفوي؟",
+        "abusive_dismissal": "واش عطاوك سبب مكتوب ولا غير شفوي؟",
+        "disciplinary_dismissal": "واش عطاوك سبب مكتوب ولا غير شفوي؟",
+        "salary_unpaid": "واش كاين تأخير ولا ما خلصوكش نهائياً؟",
+        "work_accident": "واش وقع الحادث داخل الخدمة ولا خارجها؟",
+        "work_accident_compensation": "واش وقع الحادث داخل الخدمة ولا خارجها؟",
+        "cnss": "واش قلبتي ف CNSS وما لقيتيش التصريح ولا غير قالو ليك؟",
+        "cnss_non_declaration": "واش قلبتي ف CNSS وما لقيتيش التصريح ولا غير قالو ليك؟",
+        "maternity_protection": "واش عندك شهادة طبية أو شي وثيقة كتثبت الحمل أو تاريخ الولادة؟",
+        "annual_leave": "واش طلبتي الكونجي ورفضوه ولا ما طلبتيش؟",
+        "contract_cdd_cdi": "واش عندك شي وثيقة أو دليل على الخدمة؟",
+        "no_written_contract": "واش عندك شي وثيقة أو دليل على الخدمة؟",
+        "sick_leave": "واش عطيتي شهادة طبية للمشغل؟",
+    }
+    return questions.get(intent_name, "شنو التفاصيل الإضافية اللي تقدر توضحها؟")
+
+
+def build_uncertainty_prefix(question: str, intent) -> tuple[str, str]:
+    """Add conditional language when the original facts are incomplete."""
+    detector_confidence = getattr(intent, "confidence", 1.0)
+    if detector_confidence >= 0.8:
+        return "", "high"
+
+    confidence = uncertainty_confidence(question, intent)
+    if confidence == "high":
+        return "", confidence
+
+    intent_name = getattr(intent, "intent", str(intent))
+    if intent_name in {"dismissal", "disciplinary_dismissal", "abusive_dismissal"}:
+        prefix = "إلى كان المشغل منعك ترجع للخدمة بشكل نهائي، فالقانون كيهضر على مسطرة وشروط قبل أي خلاصة."
+    elif intent_name in {"work_accident", "work_accident_compensation"}:
+        prefix = "إلا كان المقصود أن الإصابة وقعات أثناء الخدمة أو بسببها، فالقانون كيهضر على حادث شغل."
+    elif intent_name == "maternity_protection":
+        prefix = "إلا كان المقصود حماية الحمل أو الرجوع بعد الولادة، فالجواب خاصو يتربط بالشهادة الطبية والتواريخ والوثائق."
+    elif intent_name == "cnss_non_declaration":
+        prefix = "إلا كان المقصود أن المشغل كيقتطع أو كيهضر على CNSS ولكن التصريح ما باينش، خاص نراجعو وضعية التصريح والوثائق."
+    elif intent_name in {"contract_cdd_cdi", "no_written_contract"}:
+        prefix = "إلا ما كانش عندك عقد مكتوب، خاصنا نشوفو شنو كاين من دلائل الخدمة قبل أي خلاصة."
+    else:
+        prefix = "إلا كانت هادي هي الوقائع المقصودة، فالجواب القانوني كيبقى مشروط بالتفاصيل والوثائق."
+
+    question_is_too_short = len(normalize_conversation_text(question).split()) <= 3
+    if confidence == "low" or question_is_too_short:
+        clarification = build_clarification_question(intent)
+        prefix = f"{prefix}\n\nباش نعطيك جواب أدق، {clarification}"
+
+    return prefix, confidence
+
+
+def apply_uncertainty_prefix(answer: str, prefix: str) -> str:
+    if not prefix:
+        return answer
+    if answer.startswith(prefix):
+        return answer
+    structured_start = "فهمت الحالة:\n"
+    if answer.startswith(structured_start):
+        return answer.replace(structured_start, f"{structured_start}{prefix}\n\n", 1)
+    return f"{prefix}\n\n{answer}"
+
+
+def soften_uncertain_answer(answer: str, question: str, confidence: str) -> str:
+    """Remove legal conclusions that are too strong for sparse facts."""
+    if confidence == "high":
+        return answer
+
+    normalized_question = normalize_conversation_text(question)
+    mentions_gross_misconduct = (
+        "خطأ جسيم" in normalized_question
+        or "faute grave" in normalized_question
+        or "غلط كبير" in normalized_question
     )
-    return any(marker in normalized for marker in complex_markers)
+
+    softened_lines = []
+    for line in answer.splitlines():
+        normalized_line = normalize_conversation_text(line)
+        if not mentions_gross_misconduct and (
+            "خطأ جسيم" in normalized_line
+            or "الخطأ الجسيم" in normalized_line
+            or "faute grave" in normalized_line
+        ):
+            continue
+        softened_lines.append(line)
+
+    softened = "\n".join(softened_lines)
+    replacements = {
+        "تم فصلك": "إلى كان وقع إنهاء للعلاقة ديال الشغل",
+        "أنت مطرود": "إلى كان المشغل منعك ترجع للخدمة بشكل نهائي",
+        "انت مطرود": "إلى كان المشغل منعك ترجع للخدمة بشكل نهائي",
+    }
+    for source, target in replacements.items():
+        softened = softened.replace(source, target)
+
+    return re.sub(r"\n{3,}", "\n\n", softened).strip()
 
 
 def brief_answer(
@@ -742,15 +1042,38 @@ def brief_answer(
     citation: str,
     practical_note: str | None = None,
 ) -> str:
-    """Build a concise conversational answer for simple questions."""
-    parts = [direct_answer.strip()]
-    if points:
-        parts.append("\n".join(f"- {point}" for point in points))
+    """Build a complete but compact legal answer for verified rules."""
+    key_points = [point.strip() for point in points if point.strip()]
+    key_points.extend(
+        [
+            "النتيجة النهائية كتبدل حسب السبب المكتوب، التواريخ، والوثائق اللي عندك.",
+            "ما نعتمدوش على الكلام الشفوي بوحدو إلا كان ممكن نثبتو الأمور كتابة.",
+        ]
+    )
+    key_points = list(dict.fromkeys(key_points))[:5]
+
+    practical_steps = [
+        "جمع العقد أو أي دليل على الخدمة، وكشوفات الأداء، وأي مراسلات مع المشغل.",
+        "طلب توضيح مكتوب من المشغل وخلي نسخة من الطلب والجواب.",
+    ]
     if practical_note:
-        parts.append(practical_note.strip())
-    parts.append(f"المصدر: {citation}")
-    parts.append("تنبيه: هاد الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.")
-    return "\n\n".join(parts)
+        practical_steps.insert(0, practical_note.strip())
+    practical_steps.append(
+        "إلا بقات الحالة غير واضحة، تواصل مع مفتشية الشغل أو الجهة المختصة حسب الموضوع."
+    )
+    practical_steps = list(dict.fromkeys(practical_steps))[:5]
+
+    return "\n\n".join(
+        [
+            "فهمت الحالة:\n"
+            "حسب المعطيات اللي عطيتيني، السؤال كيتعلق بحق من حقوقك فالشغل وخصو يتراجع على ضوء الوثائق والسبب الحقيقي.",
+            f"الجواب القانوني:\n{direct_answer.strip()}",
+            "شنو مهم تعرف:\n" + "\n".join(f"- {point}" for point in key_points),
+            "شنو تدير دابا:\n" + "\n".join(f"- {step}" for step in practical_steps),
+            f"المصادر:\nالمصدر: {citation}",
+            "تنبيه:\nهاد الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.",
+        ]
+    )
 
 
 def source_pages(chunks: list[SourceChunk]) -> set[str]:
@@ -759,6 +1082,15 @@ def source_pages(chunks: list[SourceChunk]) -> set[str]:
 
 def verified_source_subset(question: str, chunks: list[SourceChunk]) -> list[SourceChunk]:
     """Return the most useful cited pages for deterministic answers."""
+    if is_explicit_cnss_question(question) and has_source_category(chunks, "cnss"):
+        selected = [chunk for chunk in chunks if chunk_has_category(chunk, "cnss")]
+        return selected or chunks
+    if question_matches_topic(question, "work_accident") and has_source_category(
+        chunks, "work_accident"
+    ):
+        selected = [chunk for chunk in chunks if chunk_has_category(chunk, "work_accident")]
+        return selected or chunks
+
     preferred_pages = {
         "salary": {"125", "126"},
         "overtime": {"79", "80"},
@@ -783,13 +1115,18 @@ def verified_source_subset(question: str, chunks: list[SourceChunk]) -> list[Sou
     return selected or chunks
 
 
-def answer_from_verified_rules(question: str, chunks: list[SourceChunk]) -> str | None:
+def answer_from_verified_rules(
+    question: str,
+    chunks: list[SourceChunk],
+    original_question: str | None = None,
+) -> str | None:
     """Return source-backed answers for high-risk recurring legal questions."""
     if not chunks:
         return None
 
     context = "\n".join(chunk.text for chunk in chunks).lower()
     first_source = first_citation(chunks)
+    user_question = original_question or question
 
     if question_matches_topic(question, "work_accident") and "accident du travail" in context:
         first_source = citation_for_match(chunks, "accident du travail")
@@ -803,7 +1140,7 @@ def answer_from_verified_rules(question: str, chunks: list[SourceChunk]) -> str 
             "عمليا، جمع الشهادة الطبية، أي شهود أو صور، وأي مراسلة مع المشغل.",
         )
 
-    if question_matches_topic(question, "gross_misconduct") and contains_all(
+    if question_matches_topic(user_question, "gross_misconduct") and contains_all(
         context,
         "article 61",
         "article 62",
@@ -835,7 +1172,43 @@ def answer_from_verified_rules(question: str, chunks: list[SourceChunk]) -> str 
                 "عمليا، جمع كشوفات الأداء، الرسائل، الشهود، بطاقة العمل إن وجدت، وأي دليل على الخدمة.",
             )
 
-    if question_matches_topic(question, "cnss") and contains_all(
+    if question_matches_topic(question, "contract") and ("cdd" in question.lower() or "cdi" in question.lower()):
+        first_source = first_citation(chunks)
+        if "cdi" in user_question.lower():
+            return brief_answer(
+                "CDI هو عقد شغل غير محدد المدة، يعني ما فيهش تاريخ نهاية محدد من الأول.",
+                [
+                    "كيبقى العقد مستمر حتى يسالي بطريقة قانونية بحال اتفاق، استقالة، أو فصل مع احترام الشروط القانونية.",
+                    "المهم هو تمييزه على CDD اللي كيكون محدد المدة أو مرتبط بحالات محددة.",
+                ],
+                first_source,
+            )
+        return brief_answer(
+            "CDD هو عقد شغل محدد المدة، يعني كيتربط بمدة أو حالة محددة.",
+            [
+                "خاص الحالات والمدة تكون واضحة ومبررة حسب القواعد اللي كتنظم عقود الشغل.",
+                "إلى استمر العمل خارج الإطار المتفق عليه، خاص الحالة تتراجع حسب الوثائق والوقائع.",
+            ],
+            first_source,
+        )
+
+    if is_explicit_cnss_question(question) and has_source_category(chunks, "cnss"):
+        first_source = next(
+            chunk.citation for chunk in chunks if chunk_has_category(chunk, "cnss")
+        )
+        return brief_answer(
+            "إلا كان المشغل كينقص ليك اقتطاعات CNSS ولكن ما باينش التصريح ديالك، خاص أول خطوة هي تتأكد من وضعية التصريح عند CNSS.",
+            [
+                "جمع كشوفات الأداء اللي باينين فيها الاقتطاعات، العقد إلا كان، وأي دليل على الخدمة بحال الرسائل أو شهادة العمل أو الحضور.",
+                "إلا عندك رقم CNSS أو أي وثيقة مرتبطة به، احتافظ بها باش تسهل التحقق.",
+                "طلب من المشغل توضيح مكتوب على التصريح والاقتطاعات، وخلي التواصل موثق.",
+                "إلا بقات الوضعية غير واضحة، تواصل مع CNSS للتحقق، ويمكن كذلك ترجع لمفتشية الشغل حسب الحالة.",
+                "ما نقدرش نأكد عقوبات أو مبالغ محددة إلا إذا كانت مدعومة مباشرة بالمصدر المسترجع.",
+            ],
+            first_source,
+        )
+
+    if is_explicit_cnss_question(question) and contains_all(
         context,
         "caisse nationale",
         "sécurité sociale",
@@ -950,14 +1323,8 @@ Articles 199 إلى 202 من مدونة الشغل. {first_source}
 هاد الجواب للمعلومة فقط وماشي استشارة قانونية رسمية.
 """.strip()
 
-    if (
-        question_matches_topic(question, "work_certificate")
-        and "certificat de travail" in context
-        and "38" in source_pages(chunks)
-    ):
-        first_source = next(
-            chunk.citation for chunk in chunks if chunk.page == "38"
-        )
+    if question_matches_topic(question, "work_certificate"):
+        first_source = citation_for_match(chunks, "certificat de travail")
         if not should_use_full_structure(question):
             return brief_answer(
                 "نعم، منين كيسالي عقد الشغل، المشغل خاصو يعطيك شهادة العمل داخل أجل أقصاه 8 أيام.",
@@ -1020,6 +1387,22 @@ Article 271 من مدونة الشغل. {first_source}
 هاد الجواب للمعلومة فقط وماشي استشارة قانونية رسمية.
 """.strip()
 
+    if question_matches_topic(question, "maternity_leave") and (
+        "article 159" in context or "protection de la maternité" in context
+    ):
+        first_source = citation_for_match(chunks, "article 159")
+        return brief_answer(
+            "نعم، إلا كان السؤال على الحامل أو الرجوع بعد الولادة، فمدونة الشغل كتقرر حماية خاصة مرتبطة بالحمل والأمومة. إذا كان الحمل مثبت بشهادة طبية، المشغل ما يقدرش يفسخ العقد خلال مدة الحمل ولا خلال 14 أسبوع من بعد الولادة إلا فحالات قانونية محددة جدا.",
+            [
+                "الحماية هنا ماشي طرد عادي؛ خاص التركيز يكون على الحمل، الشهادة الطبية، وتاريخ الولادة.",
+                "كاين حق فعطلة أمومة مدتها 14 أسبوع على الأقل حسب السياق المسترجع.",
+                "أي قرار ديال الفصل خاصو يتقرا بحذر: واش السبب مستقل فعلا على الحمل، وواش كاينة وثائق كتثبتو.",
+                "إلا كان الرفض بعد الولادة، مهم نشوفو تاريخ الرجوع، المراسلات، وشنو السبب اللي عطاه المشغل.",
+            ],
+            first_source,
+            "احتافظي بالشهادة الطبية، إشعار الحمل أو الولادة، أي قرار مكتوب من المشغل، وكامل الرسائل اللي كتهضر على الرجوع للخدمة.",
+        )
+
     if (
         question_matches_topic(question, "termination")
         and ("بلا سبب" in question or "بدون سبب" in question)
@@ -1067,7 +1450,7 @@ Articles 61 و62 من مدونة الشغل. {first_source}
             chunk.citation for chunk in chunks if chunk.page == "34"
         )
         return brief_answer(
-            "إلا قالو ليك طردوني، خاصنا نشوفو السبب والمسطرات قبل أي خلاصة.",
+            "إلا قالو ليك ما تبقاش تجي أو منعوك ترجع للخدمة، خاصنا نشوفو السبب والمسطرات قبل أي خلاصة.",
             [
                 "قرار الفصل خاصو يذكر الأسباب، وكيبان فالسياق أن الاستماع والمحضر مهمين فمسطرة الفصل.",
                 "ما نقدرش نأكد واش الطرد قانوني أو لا بلا وثائق الحالة.",
@@ -1216,7 +1599,10 @@ Articles 48 إلى 50 من مدونة الشغل. {first_source}
 
 def format_context(chunks: list[SourceChunk]) -> str:
     return "\n\n---\n\n".join(
-        f"المصدر {chunk.number} - الصفحة {chunk.page}:\n{chunk.text}"
+        (
+            f"Source {chunk.number} - category={chunk.category}, "
+            f"file={chunk.source}, page={chunk.page}:\n{chunk.text}"
+        )
         for chunk in chunks
     )
 
@@ -1225,40 +1611,37 @@ def search_law(question: str, n_results: int = N_RESULTS):
     return format_context(retrieve_law(question, n_results=n_results))
 
 
-def build_messages(question: str, context: str):
-    full_structure = should_use_full_structure(question)
-    answer_shape = (
-        """
-استعمل هذا الشكل فقط:
+def build_messages(
+    question: str,
+    context: str,
+    uncertainty_prefix: str = "",
+    legal_confidence: str = "high",
+):
+    answer_shape = """
+استعمل هذا الشكل فكل جواب قانوني:
 
-الجواب المختصر:
-جملة أو جوج جمل واضحة.
+فهمت الحالة:
+فسر باختصار شنو باين من سؤال المستخدم بلا ما تفترض وقائع ما قالهاش.
 
-الشرح:
-- نقطة 1
-- نقطة 2
-- نقطة 3
+الجواب القانوني:
+عطي الجواب القانوني مع الشروط والاستثناءات المهمة.
 
-الأساس القانوني:
-اذكر المصدر والصفحة فقط.
+شنو مهم تعرف:
+- 3 حتى 5 نقط قانونية أو عملية مهمة.
 
-شنو يدير المستخدم:
-خطوات عملية مختصرة.
+شنو تدير دابا:
+- 3 حتى 5 خطوات عملية.
+
+المصادر:
+ذكر الاستشهادات بصيغة: [المصدر 1، الصفحة 34]
 
 تنبيه:
-هاد الجواب للمعلومة فقط وماشي استشارة قانونية رسمية.
-"""
-        if full_structure
-        else """
-جاوب بشكل طبيعي ومختصر:
-- الجواب المباشر أولا.
-- من بعد جوج أو ثلاثة نقاط مفيدة فقط إذا احتاج السؤال.
-- من بعد سطر واحد للمصدر بصيغة: المصدر: [المصدر 1، الصفحة 34]
-- وختم بتنبيه قصير: هاد الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.
+هاد الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.
 
-ما تستعملش العناوين الطويلة إلا إذا كان السؤال معقد فعلا.
+الطول:
+- سؤال قانوني بسيط: 120 حتى 180 كلمة.
+- سؤال قانوني معقد: 180 حتى 300 كلمة.
 """
-    )
     system_prompt = f"""
 أنت مساعد قانوني مهني مختص فقط فمدونة الشغل المغربية، وماشي محامي وما كتقدمش ضمانات نهائية.
 
@@ -1269,6 +1652,10 @@ def build_messages(question: str, context: str):
 - جاوب غير انطلاقا من السياق القانوني اللي عطيتك، وما تستعملش المعرفة العامة.
 - أي حكم قانوني خاصو يكون مربوط بالمصدر اللي بان فالسياق.
 - ما تخترعش مواد، آجال، إجراءات، مؤسسات، ولا خلاصات ما كايناش فالسياق.
+- درجة الثقة فاكتمال الوقائع: {legal_confidence}.
+- إلا كانت درجة الثقة low أو medium، بدا الجواب بصياغة شرطية وما تفترضش أن المستخدم تطرد أو دار خطأ جسيم.
+- تجنب عبارات حاسمة بحال "تم فصلك"، "أنت مطرود"، و"فالخطأ الجسيم" إلا إذا المستخدم قال هاد الوقائع بوضوح أو المصدر والسياق كيدعموها مباشرة.
+- إذا كان هذا التنبيه غير فارغ، استعمل معناه فبداية الجواب: {uncertainty_prefix}
 - إلا كان السياق ضعيف، ناقص، أو ما كيجاوبش مباشرة على السؤال، قل بالضبط:
   "{INSUFFICIENT_CONTEXT_MESSAGE}"
 - كل جواب قانوني خاصو يذكر مصدر واحد على الأقل بصيغة: [المصدر 1، الصفحة 34]
@@ -1280,7 +1667,7 @@ def build_messages(question: str, context: str):
 السؤال ديال المستخدم:
 {question}
 
-السياق القانوني المستخرج من مدونة الشغل:
+السياق القانوني المستخرج من المصادر القانونية:
 {context}
 """
 
@@ -1352,13 +1739,23 @@ def contradicts_question_intent(question: str, answer: str, chunks: list[SourceC
     return False
 
 
-def answer_is_valid(question: str, answer: str, chunks: list[SourceChunk]) -> bool:
+def should_attach_sources(answer_type: str, sources: list[SourceChunk]) -> bool:
+    """Citations are only mandatory for legal answers backed by retrieved sources."""
+    return answer_type in {"legal_rag", "verified_rule"} and bool(sources)
+
+
+def answer_is_valid(
+    question: str,
+    answer: str,
+    chunks: list[SourceChunk],
+    answer_type: str = "legal_rag",
+) -> bool:
     """Validate generated answers before exposing them to the user."""
     if not answer.strip():
         return False
     if len(answer) > MAX_GENERATED_ANSWER_CHARS:
         return False
-    if chunks and not CITATION_PATTERN.search(answer):
+    if should_attach_sources(answer_type, chunks) and not CITATION_PATTERN.search(answer):
         return False
     if contains_unrelated_language(answer):
         return False
@@ -1373,6 +1770,22 @@ def answer_is_valid(question: str, answer: str, chunks: list[SourceChunk]) -> bo
 
 def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool = False):
     """Answer from Moroccan labor-law sources, refusing when support is weak."""
+    intent_result = detect_darija_intent(question)
+    direct_answer = direct_answer_for_intent(intent_result.intent)
+    is_clear_unclear_turn = (
+        intent_result.intent == "unclear"
+        and (
+            intent_result.matched_by in {"exact", "empty"}
+            or len(normalize_conversation_text(question).split()) <= 3
+        )
+    )
+    if (
+        direct_answer
+        and should_treat_as_native_direct_answer(question, intent_result)
+        and (intent_result.intent != "unclear" or is_clear_unclear_turn)
+    ):
+        return (direct_answer, []) if return_sources else direct_answer
+
     conversational_answer = conversation_router(question)
     if conversational_answer:
         return (conversational_answer, []) if return_sources else conversational_answer
@@ -1381,24 +1794,39 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
         answer = refusal_answer()
         return (answer, []) if return_sources else answer
 
-    chunks = retrieve_law(question, n_results=n_results)
+    if intent_result.is_legal and intent_result.normalized_query:
+        expanded_query = f"{question} {intent_result.normalized_query}"
+    elif has_legal_context_in_conversation(question):
+        expanded_query = expand_query(question)
+    else:
+        expanded_query = question
+    uncertainty_prefix, legal_confidence = build_uncertainty_prefix(question, intent_result)
 
-    article_number = asks_for_specific_article(question)
+    if RAG_DEBUG:
+        print("Intent:", intent_result)
+        print("Expanded:", expanded_query)
+        print("Legal confidence:", legal_confidence)
+
+    chunks = retrieve_law(expanded_query, n_results=n_results)
+
+    article_number = asks_for_specific_article(expanded_query)
     if article_number and not context_has_article(article_number, chunks):
         answer = refusal_answer()
         return (answer, []) if return_sources else answer
 
-    if not context_is_sufficient(question, chunks):
+    if not context_is_sufficient(expanded_query, chunks):
         answer = refusal_answer()
         return (answer, []) if return_sources else answer
 
-    verified_answer = answer_from_verified_rules(question, chunks)
+    verified_answer = answer_from_verified_rules(expanded_query, chunks, question)
     if verified_answer:
-        chunks = verified_source_subset(question, chunks)
+        chunks = verified_source_subset(expanded_query, chunks)
+        verified_answer = soften_uncertain_answer(verified_answer, question, legal_confidence)
+        verified_answer = apply_uncertainty_prefix(verified_answer, uncertainty_prefix)
         return (verified_answer, chunks) if return_sources else verified_answer
 
     context = format_context(chunks)
-    messages = build_messages(question, context)
+    messages = build_messages(question, context, uncertainty_prefix, legal_confidence)
 
     response = requests.post(
         OLLAMA_CHAT_URL,
@@ -1426,11 +1854,14 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
 
     answer = response.json()["message"]["content"].strip()
 
-    if chunks and not CITATION_PATTERN.search(answer):
+    if should_attach_sources("legal_rag", chunks) and not CITATION_PATTERN.search(answer):
         citations = " ".join(chunk.citation for chunk in chunks[: min(2, len(chunks))])
         answer = f"{answer.rstrip()}\n\nالمصادر: {citations}"
 
-    if not answer_is_valid(question, answer, chunks):
+    answer = soften_uncertain_answer(answer, question, legal_confidence)
+    answer = apply_uncertainty_prefix(answer, uncertainty_prefix)
+
+    if not answer_is_valid(expanded_query, answer, chunks, "legal_rag"):
         answer = refusal_answer()
         chunks = []
 
@@ -1441,7 +1872,10 @@ def print_sources(chunks: list[SourceChunk]):
     print("\nSources retrieved:")
     for chunk in chunks:
         distance = "" if chunk.distance is None else f", distance={chunk.distance:.4f}"
-        print(f"- source {chunk.number}: page {chunk.page}{distance}")
+        print(
+            f"- source {chunk.number}: category={chunk.category}, "
+            f"file={chunk.source}, page={chunk.page}{distance}"
+        )
 
 
 if __name__ == "__main__":
