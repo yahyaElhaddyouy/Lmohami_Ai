@@ -1,0 +1,115 @@
+{
+  "generated_at": "2026-06-01T13:32:49.611069+00:00",
+  "purpose": "Clean external Moroccan Darija text; isolated from legal RAG and SFT data.",
+  "raw_dir": "data/external_darija/raw",
+  "clean_output": "data/external_darija/clean/clean_darija_examples.jsonl",
+  "total_clean_examples": 93146,
+  "counts": {
+    "raw_rows": 109544,
+    "candidate_texts": 215339,
+    "kept": 93146,
+    "filtered_noisy": 90588,
+    "duplicates_removed": 31604,
+    "empty_rows": 1
+  },
+  "source_counts": {
+    "doda": 93146
+  },
+  "files": [
+    {
+      "path": "data/external_darija/raw/doda/semantic categories/emotions.csv",
+      "raw_rows": 60,
+      "candidate_texts": 60,
+      "kept": 55,
+      "filtered_noisy": 3,
+      "duplicates_removed": 2
+    },
+    {
+      "path": "data/external_darija/raw/doda/semantic categories/family.csv",
+      "raw_rows": 45,
+      "candidate_texts": 45,
+      "kept": 44,
+      "filtered_noisy": 1
+    },
+    {
+      "path": "data/external_darija/raw/doda/semantic categories/food.csv",
+      "raw_rows": 130,
+      "candidate_texts": 130,
+      "kept": 124,
+      "filtered_noisy": 2,
+      "duplicates_removed": 4
+    },
+    {
+      "path": "data/external_darija/raw/doda/semantic categories/health.csv",
+      "raw_rows": 54,
+      "candidate_texts": 54,
+      "kept": 53,
+      "filtered_noisy": 1
+    },
+    {
+      "path": "data/external_darija/raw/doda/sentences/sentences.csv",
+      "raw_rows": 48839,
+      "candidate_texts": 97678,
+      "kept": 63058,
+      "filtered_noisy": 33310,
+      "duplicates_removed": 1310
+    },
+    {
+      "path": "data/external_darija/raw/doda/syntactic categories/adjectives.csv",
+      "raw_rows": 993,
+      "candidate_texts": 993,
+      "kept": 742,
+      "duplicates_removed": 244,
+      "filtered_noisy": 7
+    },
+    {
+      "path": "data/external_darija/raw/doda/syntactic categories/adverbs.csv",
+      "raw_rows": 107,
+      "candidate_texts": 107,
+      "kept": 71,
+      "duplicates_removed": 36
+    },
+    {
+      "path": "data/external_darija/raw/doda/syntactic categories/nouns.csv",
+      "raw_rows": 1328,
+      "candidate_texts": 1328,
+      "kept": 1009,
+      "duplicates_removed": 289,
+      "filtered_noisy": 29,
+      "empty_rows": 1
+    },
+    {
+      "path": "data/external_darija/raw/doda/syntactic categories/verbs.csv",
+      "raw_rows": 1032,
+      "candidate_texts": 1032,
+      "kept": 585,
+      "duplicates_removed": 402,
+      "filtered_noisy": 45
+    },
+    {
+      "path": "data/external_darija/raw/doda/x-tra/idioms.csv",
+      "raw_rows": 49,
+      "candidate_texts": 98,
+      "filtered_noisy": 45,
+      "kept": 24,
+      "duplicates_removed": 29
+    },
+    {
+      "path": "data/external_darija/raw/doda/x-tra/proverbs.csv",
+      "raw_rows": 14,
+      "candidate_texts": 28,
+      "filtered_noisy": 14,
+      "kept": 10,
+      "duplicates_removed": 4
+    },
+    {
+      "path": "data/external_darija/raw/doda/x-tra/shorts.csv",
+      "raw_rows": 56893,
+      "candidate_texts": 113786,
+      "filtered_noisy": 57131,
+      "kept": 27371,
+      "duplicates_removed": 29284
+    }
+  ],
+  "next_step": "Use this only for language review/evaluation until a separate training plan is approved."
+}

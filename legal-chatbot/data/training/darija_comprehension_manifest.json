@@ -1,0 +1,34 @@
+{
+  "name": "Lmo7ami broad Moroccan Darija comprehension SFT dataset",
+  "version": "0.1.0",
+  "generated_at": "2026-05-31T13:18:31.938129+00:00",
+  "generator": "backend/build_darija_comprehension_sft.py",
+  "source": "data/external_darija/clean_darija_examples.jsonl and raw DODa CSV files",
+  "purpose": "Improve broad Moroccan Darija understanding and off-topic routing without memorizing law.",
+  "total_examples": 10000,
+  "splits": {
+    "train": {
+      "path": "data/training/darija_comprehension_train.jsonl",
+      "count": 8000
+    },
+    "validation": {
+      "path": "data/training/darija_comprehension_val.jsonl",
+      "count": 1000
+    },
+    "test": {
+      "path": "data/training/darija_comprehension_test.jsonl",
+      "count": 1000
+    }
+  },
+  "mode_counts": {
+    "meaning_with_boundary": 9998,
+    "scope_router": 2
+  },
+  "guardrails": [
+    "This dataset is not a legal fact dataset.",
+    "The assistant remains scoped to Moroccan labor law for specialized guidance.",
+    "Legal facts, citations, and law-specific answers must still come from RAG.",
+    "No training should replace refusal, clarification, or source-grounding behavior."
+  ],
+  "system_prompt": "أنت Lmo7ami AI، مساعد قانوني مغربي كتهضر بالدارجة المغربية. فهم رسائل المستخدم بالدارجة حتى إلا كانت خارج القانون، ولكن خليك واضح: تخصصك هو مدونة الشغل المغربية. ما تدعيش أنك محامي، ما تعطيش ضمانات، وإلى كان الموضوع خارج نطاق الشغل جاوب بلطف ووجه المستخدم باش يوضح إلا كان عندو مشكل فالشغل."
+}

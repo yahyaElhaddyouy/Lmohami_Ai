@@ -1,84 +1,139 @@
-"""Show coverage and quality stats for Darija labor-law JSONL datasets."""
+"""Print SFT dataset stats and write training_dataset_report.md."""
 
 from __future__ import annotations
 
-import argparse
 import json
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
+from typing import Any
 
-from generate_paraphrases import INTENT_SEEDS
+from validate_sft_dataset import DATA_DIR, MANIFEST_PATH, duplicate_user_inputs, validate_dataset
 
 
-def read_jsonl(path: Path) -> list[dict[str, str]]:
-    if not path.exists():
-        return []
-    rows: list[dict[str, str]] = []
-    with path.open("r", encoding="utf-8") as handle:
-        for line in handle:
-            if line.strip():
-                rows.append(json.loads(line))
+REPORT_PATH = Path(__file__).resolve().parents[1] / "training_dataset_report.md"
+
+
+def message_content(row: dict[str, Any], role: str) -> str:
+    for message in row.get("messages", []):
+        if message.get("role") == role:
+            content = message.get("content")
+            return content if isinstance(content, str) else ""
+    return ""
+
+
+def flatten_rows(rows_by_split: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for split_rows in rows_by_split.values():
+        rows.extend(split_rows)
     return rows
 
 
-def duplicate_inputs(rows: list[dict[str, str]]) -> dict[str, int]:
-    counts = Counter(" ".join(row.get("input", "").split()).casefold() for row in rows)
-    return {text: count for text, count in counts.items() if text and count > 1}
+def count_by_metadata(rows: list[dict[str, Any]], key: str) -> dict[str, int]:
+    counts = Counter(str(row.get("metadata", {}).get(key, "")) for row in rows)
+    counts.pop("", None)
+    return dict(sorted(counts.items()))
+
+
+def load_manifest() -> dict[str, Any]:
+    if not MANIFEST_PATH.exists():
+        return {}
+    return json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+
+
+def build_report(result: dict[str, Any]) -> str:
+    rows = flatten_rows(result["rows_by_split"])
+    duplicates = duplicate_user_inputs(rows)
+    topic_counts = count_by_metadata(rows, "topic")
+    intent_counts = count_by_metadata(rows, "intent")
+    requires_rag_count = sum(1 for row in rows if row.get("metadata", {}).get("requires_rag") is True)
+    manifest = load_manifest()
+    errors = result["errors"]
+
+    lines = [
+        "# Lmo7ami SFT Training Dataset Report",
+        "",
+        "## Summary",
+        "",
+        f"- Total examples: {len(rows)}",
+        f"- Train examples: {len(result['rows_by_split'].get('train', []))}",
+        f"- Validation examples: {len(result['rows_by_split'].get('val', []))}",
+        f"- Test examples: {len(result['rows_by_split'].get('test', []))}",
+        f"- Requires RAG examples: {requires_rag_count}",
+        f"- Duplicate user input count: {len(duplicates)}",
+        f"- Validation errors: {len(errors)}",
+        "",
+        "## Examples Per Topic",
+        "",
+    ]
+
+    for topic, count in topic_counts.items():
+        lines.append(f"- {topic}: {count}")
+
+    lines.extend(["", "## Examples Per Intent", ""])
+    for intent, count in intent_counts.items():
+        lines.append(f"- {intent}: {count}")
+
+    lines.extend(["", "## Validation Errors", ""])
+    if errors:
+        for error in errors:
+            lines.append(f"- {error}")
+    else:
+        lines.append("- None")
+
+    lines.extend(
+        [
+            "",
+            "## Dataset Files",
+            "",
+            f"- Training directory: `{DATA_DIR.relative_to(Path(__file__).resolve().parents[1])}`",
+            "- Train split: `data/training/lmo7ami_sft_train.jsonl`",
+            "- Validation split: `data/training/lmo7ami_sft_val.jsonl`",
+            "- Test split: `data/training/lmo7ami_sft_test.jsonl`",
+            "- Manifest: `data/training/dataset_manifest.json`",
+            "",
+            "## Recommended Next Step",
+            "",
+        ]
+    )
+
+    if errors:
+        lines.append("Fix the dataset and rerun `python validate_sft_dataset.py` before any QLoRA training.")
+    else:
+        lines.append(
+            "Review a small random sample from each split manually, then wire these files into the QLoRA training job without bypassing RAG for legal facts."
+        )
+
+    if manifest:
+        lines.extend(
+            [
+                "",
+                "## Manifest Snapshot",
+                "",
+                f"- Dataset version: {manifest.get('version', 'unknown')}",
+                f"- Generator: `{manifest.get('generator', 'unknown')}`",
+                f"- Format: {manifest.get('format', 'unknown')}",
+            ]
+        )
+
+    return "\n".join(lines) + "\n"
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "paths",
-        nargs="*",
-        default=[
-            "data/training/darija_labor_intents_qlora.jsonl",
-            "data/evaluation/darija_labor_intents_eval.jsonl",
-        ],
-    )
-    parser.add_argument("--weak-threshold", type=int, default=10)
-    args = parser.parse_args()
+    result = validate_dataset()
+    report = build_report(result)
+    REPORT_PATH.write_text(report, encoding="utf-8")
 
-    rows_by_path: dict[str, list[dict[str, str]]] = {}
-    all_rows: list[dict[str, str]] = []
-    for raw_path in args.paths:
-        path = Path(raw_path)
-        rows = read_jsonl(path)
-        rows_by_path[str(path)] = rows
-        all_rows.extend(rows)
-
-    intent_counts = Counter(row.get("output", "") for row in all_rows if row.get("output"))
-    duplicates = duplicate_inputs(all_rows)
-    weak_intents = {
-        intent: intent_counts.get(intent, 0)
-        for intent in sorted(INTENT_SEEDS)
-        if intent_counts.get(intent, 0) < args.weak_threshold
-    }
-
-    per_file = defaultdict(dict)
-    for path, rows in rows_by_path.items():
-        counts = Counter(row.get("output", "") for row in rows if row.get("output"))
-        per_file[path] = dict(sorted(counts.items()))
-
-    print("Dataset stats")
-    print(f"- number of intents: {len(intent_counts)} / {len(INTENT_SEEDS)}")
-    print(f"- paraphrase count: {len(all_rows)}")
-    print(f"- duplicate inputs: {len(duplicates)}")
-    print(f"- weak intents threshold: {args.weak_threshold}")
-    if weak_intents:
-        print("- weak intents:")
-        for intent, count in weak_intents.items():
-            print(f"  - {intent}: {count}")
-    else:
-        print("- weak intents: none")
-
-    print("- records per intent:")
-    for intent in sorted(INTENT_SEEDS):
-        print(f"  - {intent}: {intent_counts.get(intent, 0)}")
-
-    print("- records per file:")
-    for path, counts in per_file.items():
-        print(f"  - {path}: {sum(counts.values())}")
+    print("SFT dataset stats")
+    print(f"- total examples: {result['total']}")
+    print("- split counts:")
+    for split, count in result["split_counts"].items():
+        print(f"  - {split}: {count}")
+    print("- examples per topic:")
+    for topic, count in result["topic_counts"].items():
+        print(f"  - {topic}: {count}")
+    print(f"- duplicate count: {len(result['duplicates'])}")
+    print(f"- validation errors: {len(result['errors'])}")
+    print(f"- report: {REPORT_PATH.relative_to(Path(__file__).resolve().parents[1])}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-06-01T13:32:31.278695+00:00",
+  "purpose": "External Moroccan Darija raw import only; not mixed with legal RAG or training data.",
+  "sources_config": "data/external_darija/sources.json",
+  "raw_dir": "data/external_darija/raw",
+  "clean_dir": "data/external_darija/clean",
+  "total_sources_configured": 3,
+  "total_raw_files": 13,
+  "total_raw_rows": 109556,
+  "sources": [
+    {
+      "name": "doda",
+      "type": "github_raw",
+      "status": "ok",
+      "raw_files": [
+        "data/external_darija/raw/doda_main.zip",
+        "data/external_darija/raw/doda/semantic categories/emotions.csv",
+        "data/external_darija/raw/doda/semantic categories/family.csv",
+        "data/external_darija/raw/doda/semantic categories/food.csv",
+        "data/external_darija/raw/doda/semantic categories/health.csv",
+        "data/external_darija/raw/doda/sentences/sentences.csv",
+        "data/external_darija/raw/doda/syntactic categories/adjectives.csv",
+        "data/external_darija/raw/doda/syntactic categories/adverbs.csv",
+        "data/external_darija/raw/doda/syntactic categories/nouns.csv",
+        "data/external_darija/raw/doda/syntactic categories/verbs.csv",
+        "data/external_darija/raw/doda/x-tra/idioms.csv",
+        "data/external_darija/raw/doda/x-tra/proverbs.csv",
+        "data/external_darija/raw/doda/x-tra/shorts.csv"
+      ],
+      "raw_rows": 109556,
+      "errors": [],
+      "notes": [
+        "Imported configured files from GitHub archive because raw URLs were empty."
+      ]
+    },
+    {
+      "name": "atlaset",
+      "type": "huggingface",
+      "status": "skipped",
+      "raw_files": [],
+      "raw_rows": 0,
+      "errors": [],
+      "notes": [
+        "Optional Hugging Face dependency missing: pip install datasets"
+      ]
+    },
+    {
+      "name": "manual_local",
+      "type": "local_files",
+      "status": "skipped",
+      "raw_files": [],
+      "raw_rows": 0,
+      "errors": [],
+      "notes": [
+        "No manual local files configured."
+      ]
+    }
+  ],
+  "next_step": "Run python clean_external_darija.py to normalize, deduplicate, and filter noisy rows."
+}

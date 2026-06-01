@@ -51,7 +51,7 @@ SPECIFIC_INTENT_DEFINITIONS = {
     "work_accident_compensation": {
         "source_intent": "work_accident",
         "normalized_query": "accident du travail حادثة شغل إصابة مهنية تصريح حادث الشغل تعويض",
-        "keywords": ["حادث", "حادثة شغل", "تجرح", "تكسرت", "تعويض", "accident"],
+        "keywords": ["حادث", "حادثة شغل", "تجرح", "تجرحت", "تكسرت", "طحت", "ضرباتني", "machine", "الورشة", "تعويض", "accident"],
     },
     "cnss_non_declaration": {
         "source_intent": "cnss",
@@ -61,7 +61,7 @@ SPECIFIC_INTENT_DEFINITIONS = {
     "abusive_dismissal": {
         "source_intent": "dismissal",
         "normalized_query": "licenciement abusif فصل تعسفي طرد بلا سبب مسطرة الفصل محضر الاستماع",
-        "keywords": ["طرد", "طردوني", "بلا سبب", "بدون سبب", "تعسفي", "licenciement abusif"],
+        "keywords": ["طرد", "طردوني", "حيدوني", "ما تجيش", "منعوني ندخل", "منعني ندخل", "مخلاونيش ندخل", "badge", "fin de contrat", "بلا سبب", "بدون سبب", "تعسفي", "licenciement abusif"],
     },
 }
 OUT_OF_SCOPE_HINTS = {
@@ -82,9 +82,34 @@ OUT_OF_SCOPE_HINTS = {
     "مخالفة",
     "مخالفه",
     "الطريق",
+    "البوليس",
+    "الشرطة",
+    "جنائي",
+    "ميراث",
+    "إرث",
+    "عقار",
+    "الهجرة",
+    "كندا",
+    "ضريبة",
+    "impôts",
+    "impots",
+    "banque",
     "فيزا",
     "فرنسا",
     "code route",
+}
+WORK_CONTEXT_HINTS = {
+    "خدمة",
+    "الخدمة",
+    "للخدمة",
+    "الشغل",
+    "العمل",
+    "شركة",
+    "الشركة",
+    "employeur",
+    "salarié",
+    "salarie",
+    "travail",
 }
 
 DIRECT_ANSWERS = {
@@ -131,6 +156,16 @@ def normalize_text(text: str) -> str:
 
 def tokens(text: str) -> set[str]:
     return {token for token in normalize_text(text).split() if len(token) > 1}
+
+
+def normalized_term_matches(text_norm: str, term_norm: str) -> bool:
+    if not term_norm:
+        return False
+    word_chars = r"A-Za-z0-9_\u0621-\u064A\u0660-\u0669\u0671-\u06D3\u06FA-\u06FF"
+    if re.search(rf"[^{word_chars}]", term_norm):
+        return term_norm in text_norm
+    pattern = rf"(?<![{word_chars}]){re.escape(term_norm)}(?![{word_chars}])"
+    return bool(re.search(pattern, text_norm, flags=re.IGNORECASE))
 
 
 def load_jsonl(path: Path) -> list[dict[str, Any]]:
@@ -188,7 +223,7 @@ def keyword_score(question_norm: str, question_tokens: set[str], definition: dic
         if not keyword_norm:
             continue
         keyword_tokens = tokens(keyword_norm)
-        if keyword_norm in question_norm:
+        if normalized_term_matches(question_norm, keyword_norm):
             score += 0.45 + min(len(keyword_tokens), 4) * 0.04
         elif keyword_tokens and keyword_tokens <= question_tokens:
             score += 0.35
@@ -266,7 +301,13 @@ def detect_darija_intent(question: str) -> DarijaIntentResult:
     if not question_norm:
         return DarijaIntentResult("unclear", "", False, 1.0, "empty")
 
-    if any(normalize_text(hint) in question_norm for hint in OUT_OF_SCOPE_HINTS):
+    out_of_scope_hit = any(normalize_text(hint) in question_norm for hint in OUT_OF_SCOPE_HINTS)
+    has_work_context = any(normalize_text(hint) in question_norm for hint in WORK_CONTEXT_HINTS)
+    mentions_work_accident = (
+        any(normalize_text(term) in question_norm for term in ("حادث", "حادثة", "accident", "طحت", "تجرحت"))
+        and has_work_context
+    )
+    if out_of_scope_hit and not mentions_work_accident:
         definition = intents.get("out_of_scope", {})
         return DarijaIntentResult(
             "out_of_scope",

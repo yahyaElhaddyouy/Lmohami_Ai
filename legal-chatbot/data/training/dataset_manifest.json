@@ -1,0 +1,97 @@
+{
+  "name": "Lmo7ami AI Moroccan Darija labor-law SFT dataset",
+  "version": "0.1.0",
+  "generated_at": "2026-05-30T23:30:14.517517+00:00",
+  "generator": "backend/build_sft_dataset.py",
+  "format": "jsonl chat messages",
+  "schema": {
+    "messages": [
+      "system",
+      "user",
+      "assistant"
+    ],
+    "metadata_required": [
+      "intent",
+      "topic",
+      "source",
+      "requires_rag",
+      "quality"
+    ]
+  },
+  "system_prompt": "أنت مساعد قانوني مغربي متخصص في مدونة الشغل المغربية. جاوب بالدارجة المغربية، بطريقة مهنية، عملية، وحذرة. لا تدعي أنك محامي ولا تعطي ضمانات قانونية.",
+  "total_examples": 1500,
+  "splits": {
+    "train": {
+      "path": "data/training/lmo7ami_sft_train.jsonl",
+      "count": 1200
+    },
+    "validation": {
+      "path": "data/training/lmo7ami_sft_val.jsonl",
+      "count": 150
+    },
+    "test": {
+      "path": "data/training/lmo7ami_sft_test.jsonl",
+      "count": 150
+    }
+  },
+  "split_ratio": {
+    "train": 0.8,
+    "validation": 0.1,
+    "test": 0.1
+  },
+  "records_per_topic": {
+    "annual_leave": 68,
+    "clarification_questions": 68,
+    "cnss_non_declaration": 68,
+    "contract_type": 68,
+    "disciplinary_dismissal": 69,
+    "dismissal": 69,
+    "fake_article_refusal": 68,
+    "greetings_identity": 69,
+    "legal_guarantee_refusal": 68,
+    "maternity_protection": 68,
+    "no_written_contract": 68,
+    "out_of_scope_refusal": 68,
+    "overtime": 68,
+    "practical_steps": 68,
+    "preavis": 68,
+    "resignation": 68,
+    "salary_deduction": 68,
+    "salary_unpaid": 68,
+    "sick_leave": 68,
+    "unclear_question": 69,
+    "work_accident": 68,
+    "work_certificate": 68
+  },
+  "coverage": [
+    "greetings / thanks / identity",
+    "unclear legal questions",
+    "dismissal",
+    "disciplinary dismissal",
+    "salary unpaid",
+    "salary deduction",
+    "CNSS non-declaration",
+    "work accident",
+    "annual leave",
+    "sick leave",
+    "maternity protection",
+    "CDD/CDI",
+    "no written contract",
+    "work certificate",
+    "preavis",
+    "resignation",
+    "overtime",
+    "out-of-scope refusal",
+    "fake article refusal",
+    "legal guarantee refusal",
+    "clarification questions",
+    "practical steps"
+  ],
+  "safety_notes": [
+    "Assistant behavior is trained for Darija understanding, tone, refusal, clarification, and practical guidance.",
+    "Legal facts and article-level citations must still come from RAG.",
+    "The dataset avoids fake article numbers except user prompts in fake-article refusal examples marked source=insufficient_context.",
+    "Assistant messages avoid guarantees and include cautious guidance/disclaimer language.",
+    "No private personal data or copyrighted legal text is included."
+  ]
+}

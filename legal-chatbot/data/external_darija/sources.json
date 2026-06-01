@@ -1,0 +1,36 @@
+{
+  "sources": [
+    {
+      "name": "doda",
+      "type": "github_raw",
+      "urls": [],
+      "github_repo": "darija-open-dataset/dataset",
+      "ref": "main",
+      "paths": [
+        "sentences/sentences.csv",
+        "x-tra/idioms.csv",
+        "x-tra/proverbs.csv",
+        "x-tra/shorts.csv",
+        "semantic categories/food.csv",
+        "semantic categories/family.csv",
+        "semantic categories/emotions.csv",
+        "semantic categories/health.csv",
+        "syntactic categories/adjectives.csv",
+        "syntactic categories/adverbs.csv",
+        "syntactic categories/nouns.csv",
+        "syntactic categories/verbs.csv"
+      ]
+    },
+    {
+      "name": "atlaset",
+      "type": "huggingface",
+      "dataset": "atlasia/Atlaset",
+      "max_rows": 5000
+    },
+    {
+      "name": "manual_local",
+      "type": "local_files",
+      "paths": []
+    }
+  ]
+}

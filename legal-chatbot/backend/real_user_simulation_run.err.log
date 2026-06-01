@@ -1,0 +1,85 @@
+2026-05-31 02:21:49,619 INFO GET /health -> 200 3.67ms
+2026-05-31 02:21:49,647 INFO HTTP Request: GET http://testserver/health "HTTP/1.1 200 OK"
+2026-05-31 02:21:49,726 INFO POST /chat -> 200 12.55ms
+2026-05-31 02:21:49,764 INFO HTTP Request: POST http://testserver/chat "HTTP/1.1 200 OK"
+2026-05-31 02:21:49,805 INFO POST /chat -> 503 20.16ms
+2026-05-31 02:21:49,821 INFO HTTP Request: POST http://testserver/chat "HTTP/1.1 503 Service Unavailable"
+2026-05-31 02:21:49,829 ERROR Unhandled API error on POST /chat
+Traceback (most recent call last):
+  File "C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\main.py", line 64, in request_middleware
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Python314\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Python314\Lib\site-packages\starlette\middleware\cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Python314\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Python314\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\fastapi\routing.py", line 118, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Python314\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Python314\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Python314\Lib\site-packages\fastapi\routing.py", line 104, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\fastapi\routing.py", line 428, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Python314\Lib\site-packages\fastapi\routing.py", line 316, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\anyio\to_thread.py", line 63, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python314\Lib\site-packages\anyio\_backends\_asyncio.py", line 2518, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Python314\Lib\site-packages\anyio\_backends\_asyncio.py", line 1002, in run
+    result = context.run(func, *args)
+  File "C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\main.py", line 140, in chat
+    answer, sources = ask_chatbot(request.question, return_sources=True)
+                      ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\simulate_real_users.py", line 864, in raw_exception
+    raise ValueError("internal secret stack trace simulation")
+ValueError: internal secret stack trace simulation
+2026-05-31 02:21:49,873 INFO HTTP Request: POST http://testserver/chat "HTTP/1.1 500 Internal Server Error"
+2026-05-31 02:21:49,876 INFO OPTIONS /chat -> 200 0.23ms
+2026-05-31 02:21:49,878 INFO HTTP Request: OPTIONS http://testserver/chat "HTTP/1.1 200 OK"
+2026-05-31 02:21:51,626 WARNING Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:21:53,681 WARNING Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:21:55,727 INFO Backing off send_request(...) for 0.6s (requests.exceptions.ProxyError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by ProxyError('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))))
+2026-05-31 02:21:58,407 WARNING Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:00,452 WARNING Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:02,511 INFO Backing off send_request(...) for 0.8s (requests.exceptions.ProxyError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by ProxyError('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))))
+2026-05-31 02:22:05,377 WARNING Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:07,445 WARNING Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:09,518 INFO Backing off send_request(...) for 3.0s (requests.exceptions.ProxyError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by ProxyError('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))))
+2026-05-31 02:22:14,526 WARNING Retrying (Retry(total=1, connect=1, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:16,577 WARNING Retrying (Retry(total=0, connect=0, read=2, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /batch/
+2026-05-31 02:22:18,657 ERROR Giving up send_request(...) after 4 tries (requests.exceptions.ProxyError: HTTPSConnectionPool(host='us.i.posthog.com', port=443): Max retries exceeded with url: /batch/ (Caused by ProxyError('Unable to connect to proxy', NewConnectionError("HTTPSConnection(host='127.0.0.1', port=9): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it"))))

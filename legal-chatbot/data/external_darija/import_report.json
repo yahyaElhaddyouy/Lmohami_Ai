@@ -1,0 +1,59 @@
+{
+  "generated_at": "2026-05-31T13:12:25.139029+00:00",
+  "purpose": "External Moroccan Darija import; not mixed with the legal SFT dataset.",
+  "sources_config": "data/external_darija/sources.json",
+  "raw_dir": "data/external_darija/raw",
+  "clean_output": "data/external_darija/clean_darija_examples.jsonl",
+  "total_sources_configured": 2,
+  "total_clean_examples": 91921,
+  "source_counts": {
+    "doda": 91921
+  },
+  "sources": [
+    {
+      "name": "doda",
+      "type": "github_raw",
+      "status": "ok",
+      "raw_files": [
+        "data/external_darija/raw/doda_main.zip",
+        "data/external_darija/raw/doda/semantic categories/emotions.csv",
+        "data/external_darija/raw/doda/semantic categories/family.csv",
+        "data/external_darija/raw/doda/semantic categories/food.csv",
+        "data/external_darija/raw/doda/semantic categories/health.csv",
+        "data/external_darija/raw/doda/sentences/sentences.csv",
+        "data/external_darija/raw/doda/syntactic categories/adjectives.csv",
+        "data/external_darija/raw/doda/syntactic categories/adverbs.csv",
+        "data/external_darija/raw/doda/syntactic categories/nouns.csv",
+        "data/external_darija/raw/doda/syntactic categories/verbs.csv",
+        "data/external_darija/raw/doda/x-tra/idioms.csv",
+        "data/external_darija/raw/doda/x-tra/proverbs.csv",
+        "data/external_darija/raw/doda/x-tra/shorts.csv"
+      ],
+      "raw_rows": 109544,
+      "candidate_texts": 215339,
+      "kept": 91921,
+      "duplicates_removed": 31285,
+      "filtered_noisy": 92133,
+      "errors": [],
+      "notes": [
+        "Imported from GitHub archive fallback because raw URLs were empty or unavailable."
+      ]
+    },
+    {
+      "name": "atlaset",
+      "type": "huggingface",
+      "status": "failed",
+      "raw_files": [],
+      "raw_rows": 0,
+      "candidate_texts": 0,
+      "kept": 0,
+      "duplicates_removed": 0,
+      "filtered_noisy": 0,
+      "errors": [
+        "atlasia/Atlaset: Dataset 'atlasia/Atlaset' is a gated dataset on the Hub. You must be authenticated to access it."
+      ],
+      "notes": []
+    }
+  ],
+  "next_step": "Review clean_darija_examples.jsonl manually before deciding whether to mix it into any training dataset."
+}
