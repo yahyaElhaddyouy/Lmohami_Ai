@@ -1,0 +1,424 @@
+
+[termination_001] شنو الحقوق ديالي إلا طردني المشغل بلا سبب؟
+PASS
+Sources: p34, p34
+
+[termination_002] طردوني من الخدمة شنو ندير؟
+PASS
+Sources: p34, p34
+
+[termination_003] المشغل خرجني بلا ما يسمع ليا واش قانوني؟
+PASS
+Sources: p34, p35
+
+[termination_004] واش الطرد بلا سبب مقبول فمدونة الشغل؟
+PASS
+Sources: p34, p34
+
+[termination_005] قالو ليا سير بحالك بلا ورقة الطرد
+PASS
+Sources: p34, p35
+
+[termination_006] بغيت نعرف واش خاص محضر الاستماع قبل الفصل
+PASS
+Sources: p34, p34
+
+[termination_007] طردوني تأديبيا واش خاص يسمعو ليا؟
+PASS
+Sources: p34, p34
+
+[termination_008] شنو المسطرة قبل الطرد فالشغل؟
+PASS
+Sources: p34, p35
+
+[termination_009] واش قرار الفصل خاصو يكون فيه السبب؟
+PASS
+Sources: p34, p35
+
+[termination_010] شنو الوثائق اللي نجمع إلا طردوني؟
+PASS
+Sources: p34, p34
+
+[gross_misconduct_001] شنو هو الخطأ الجسيم؟
+PASS
+Sources: p26, p34
+
+[gross_misconduct_002] إلا قالو عندي خطأ جسيم واش كاين préavis؟
+PASS
+Sources: p26, p31
+
+[gross_misconduct_003] الخطأ الجسيم واش كيحيد التعويض؟
+PASS
+Sources: p26, p34
+
+[gross_misconduct_004] واش خاص محضر الاستماع فالخطأ الجسيم؟
+PASS
+Sources: p34, p34
+
+[gross_misconduct_005] المشغل قال ليا faute grave شنو خاصني نعرف؟
+PASS
+Sources: p34, p34
+
+[salary_001] شنو ندير إلا المشغل ما خلصنيش؟
+PASS
+Sources: p125, p126
+
+[salary_002] ماعطانيش الصالير هاد الشهر
+PASS
+Sources: p125, p126
+
+[salary_003] واش عدم أداء الأجر مخالفة؟
+PASS
+Sources: p125, p126
+
+[salary_004] الصالير تأخر بزاف شنو ندير؟
+PASS
+Sources: p125, p126
+
+[salary_005] ما خلصنيش المشغل واش عندي حق؟
+PASS
+Sources: p125, p126
+
+[salary_006] المشغل نقص ليا فالصالير بلا شرح
+PASS
+Sources: p125, p126
+
+[salary_007] شنو الدليل اللي نجمع إلا ما خلصنيش؟
+PASS
+Sources: p125, p126
+
+[salary_008] واش خاص الأجر يتخلص بانتظام؟
+PASS
+Sources: p125, p126
+
+[salary_009] أجري ما توصلتش به شنو المعمول؟
+PASS
+Sources: p125, p126
+
+[salary_010] الخلاص ديالي بقا عند الشركة
+PASS
+Sources: p125, p126
+
+[leave_001] شحال عندي من نهار ديال الكونجي السنوي؟
+PASS
+Sources: p88
+
+[leave_002] رفض الكونجي ديالي شنو ندير؟
+PASS
+Sources: p88
+
+[leave_003] واش العطلة السنوية كتخلص؟
+PASS
+Sources: p88
+
+[leave_004] خدمت ستة شهور واش عندي كونجي؟
+PASS
+Sources: p88
+
+[leave_005] الكونجي كيتحسب كيفاش فمدونة الشغل؟
+PASS
+Sources: p88
+
+[leave_006] الأجير أقل من 18 عام شحال عندو من عطلة؟
+PASS
+Sources: p88
+
+[leave_007] العطلة السنوية نهار ونص واش صحيحة؟
+PASS
+Sources: p88
+
+[leave_008] واش عندي الحق فالعطلة من بعد 6 شهور؟
+PASS
+Sources: p88, p89
+
+[leave_009] بغيت نفهم congé annuel payé
+PASS
+Sources: p88
+
+[leave_010] شنو كتعني العطلة السنوية المؤدى عنها؟
+PASS
+Sources: p88
+
+[overtime_001] واش الساعات الإضافية خاصها تخلص؟
+PASS
+Sources: p79
+
+[overtime_002] السوايع الزايدة واش فيها زيادة فالصالير؟
+PASS
+Sources: p79
+
+[overtime_003] خدمت أكثر من الوقت العادي شنو حقي؟
+PASS
+Sources: p79
+
+[overtime_004] heures supplémentaires فمدونة الشغل شنو هي؟
+PASS
+Sources: p79
+
+[overtime_005] واش الخدمة فالراحة الأسبوعية كتزاد فالأجر؟
+PASS
+Sources: p79, p125
+
+[overtime_006] شنو هي majoration ديال الساعات الإضافية؟
+PASS
+Sources: p79
+
+[overtime_007] خدمت بالليل ساعات إضافية واش كتخلص أكثر؟
+PASS
+Sources: p79, p80
+
+[overtime_008] شنو ندير إلا ما خلصونيش السوايع الزايدة؟
+PASS
+Sources: p79, p125
+
+[sick_001] واش المشغل يقدر يمنعني من الغياب بسبب المرض إلا عندي شهادة طبية؟
+PASS
+Sources: p98
+
+[sick_002] مرضت وغيبت شنو خاصني ندير؟
+PASS
+Sources: p98, p98
+
+[sick_003] شهادة طبية خاصها تتعطى للمشغل فوقاش؟
+PASS
+Sources: p98
+
+[sick_004] غبت بالمرض أكثر من أربعة أيام
+PASS
+Sources: p98, p98
+
+[sick_005] واش خاصني نخبر المشغل بالمرض ف48 ساعة؟
+PASS
+Sources: p98, p98
+
+[sick_006] certificat médical فالخدمة شنو الدور ديالو؟
+PASS
+Sources: p98
+
+[sick_007] المشغل بغا يدير فحص مضاد فالمرض
+PASS
+Sources: p98, p98
+
+[contract_001] شنو الفرق بين CDD و CDI؟
+PASS
+Sources: p19, p19
+
+[contract_002] خدام بلا عقد شنو الحقوق ديالي؟
+PASS
+Sources: p19, p19
+
+[contract_003] بلا كونطرا واش نقدر نثبت الخدمة؟
+PASS
+Sources: p19, p19
+
+[contract_004] واش عقد الشغل خاصو يكون مكتوب؟
+PASS
+Sources: p19, p19
+
+[contract_005] CDD شنو الحالات ديالو؟
+PASS
+Sources: p19, p19
+
+[contract_006] CDI كيعني شنو؟
+PASS
+Sources: p19, p19
+
+[contract_007] واش CDD يقدر يولي CDI؟
+PASS
+Sources: p19, p19
+
+[contract_008] عندي عقد محدد المدة وبقى مستمر
+PASS
+Sources: p19, p19
+
+[contract_009] proof ديال relation de travail شنو ممكن يكون؟
+PASS
+Sources: p19, p18
+
+[contract_010] واش يمكن إثبات عقد الشغل بجميع الوسائل؟
+PASS
+Sources: p19, p19
+
+[certificate_001] واش عندي الحق فشهادة العمل من بعد ما نخرج من الخدمة؟
+PASS
+Sources: p19, p18
+
+[certificate_002] شهادة العمل خاصها تعطى فوقاش؟
+PASS
+Sources: p19, p18
+
+[certificate_003] المشغل ما عطانيش شهادة الشغل
+PASS
+Sources: p38, p38
+
+[certificate_004] شنو خاص يكون فcertificat de travail؟
+PASS
+Sources: p38, p38
+
+[certificate_005] واش شهادة العمل فيها تاريخ الدخول والخروج؟
+PASS
+Sources: p19, p18
+
+[maternity_001] واش الحامل عندها حماية من الطرد؟
+PASS
+Sources: p64, p66
+
+[maternity_002] حقوق المرأة الحامل فالخدمة شنو هي؟
+PASS
+Sources: p64, p66
+
+[maternity_003] congé de maternité شحال مدتو؟
+PASS
+Sources: p64, p66
+
+[maternity_004] المشغل بغا يطردني وأنا حامل
+PASS
+Sources: p64, p66
+
+[maternity_005] الحمل مثبت بشهادة طبية واش كاينة حماية؟
+PASS
+Sources: p64, p66
+
+[preavis_001] شنو هو préavis فمدونة الشغل؟
+PASS
+Sources: p31, p31
+
+[preavis_002] مدة الإخطار قبل الطرد شنو هي؟
+PASS
+Sources: p31, p34
+
+[preavis_003] واش عدم احترام préavis فيه تعويض؟
+PASS
+Sources: p31, p34
+
+[preavis_004] indemnité de préavis شنو معناها؟
+PASS
+Sources: p31
+
+[preavis_005] واش كاين préavis ف CDI؟
+PASS
+Sources: p31, p19
+
+[accident_001] أنا وقع ليا حادث داخل الخدمة
+PASS
+Sources: p13, p9
+
+[accident_002] طاح عليا شي حاجة فالخدمة
+PASS
+Sources: p13, p9
+
+[accident_003] تكسرت فالخدمة شنو ندير؟
+PASS
+Sources: p13, p9
+
+[accident_004] تجرحت فالعمل واش هادشي حادث شغل؟
+PASS
+Sources: p13, p9
+
+[accident_005] شنو الحقوق ديالي إلا وقع ليا حادث شغل؟
+PASS
+Sources: p13, p9
+
+[accident_006] accident de travail فالشركة شنو خاص يتدار؟
+PASS
+Sources: p13, p9
+
+[accident_007] حادث داخل العمل واش خاص تقرير؟
+PASS
+Sources: p13, p9
+
+[accident_008] مرض مهني ولا حادث شغل شنو الفرق؟
+PASS
+Sources: p13, p9
+
+[cnss_001] ما تصرحتش ف CNSS شنو ندير؟
+PASS
+Sources: p6, p17
+
+[cnss_002] المشغل ما مصرحش بيا فالضمان الاجتماعي
+PASS
+Sources: p6, p17
+
+[cnss_003] CNSS والتصريح فالخدمة شنو العلاقة؟
+PASS
+Sources: p6, p17
+
+[cnss_004] ما مسجلنيش فالصندوق الوطني للضمان الاجتماعي
+PASS
+Sources: p6, p17
+
+[out_scope_001] كيفاش ندير طلاق اتفاقي؟
+PASS
+Sources: none
+
+[out_scope_002] بغيت نعرف شنو ندير فحادثة سير فالطريق العام؟
+PASS
+Sources: none
+
+[out_scope_003] مول الدار بغا يخرجني من الكراء
+PASS
+Sources: none
+
+[out_scope_004] كيفاش نرفع دعوى تجارية؟
+PASS
+Sources: none
+
+[out_scope_005] شنو ندير فالإرث؟
+PASS
+Sources: none
+
+[out_scope_006] بغيت نسجل شركة تجارية
+PASS
+Sources: none
+
+[out_scope_007] عندي مشكل مع الجار
+PASS
+Sources: none
+
+[out_scope_008] عندي مخالفة فالطريق
+PASS
+Sources: none
+
+[out_scope_009] كيفاش ندير فيزا لفرنسا؟
+PASS
+Sources: none
+
+[out_scope_010] شنو ندير فملف جنائي؟
+PASS
+Sources: none
+
+[article_001] شنو كتنص عليه المادة 999 من مدونة الشغل؟
+PASS
+Sources: none
+
+[article_002] شرح ليا article 1365 فمدونة الشغل
+PASS
+Sources: none
+
+[article_003] شنو كتعني المادة 777 من قانون الشغل؟
+PASS
+Sources: none
+
+[article_004] واش المادة 888 كتضمن ليا الربح؟
+PASS
+Sources: none
+
+[article_005] عطيني حكم المادة 1234 من مدونة الشغل
+PASS
+Sources: none
+
+[article_006] article 999 فيه تعويض كبير؟
+PASS
+Sources: none
+
+[article_007] شنو كاين فالمادة 0 من مدونة الشغل؟
+PASS
+Sources: none
+
+[article_008] واش المادة 9999 كتسمح بالطرد؟
+PASS
+Sources: none
+
+Trust score: 105/105 (100%)
+Status: TRUSTED FOR THIS TEST SET. Keep adding real-world cases.
+Report written to C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\stress_runs\run_500\trust_report.json

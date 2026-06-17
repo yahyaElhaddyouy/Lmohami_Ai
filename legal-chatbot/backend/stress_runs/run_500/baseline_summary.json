@@ -1,0 +1,86 @@
+{
+  "conversation_classifier_score": 0.992,
+  "darija_comprehension_score": 0.988,
+  "intent_score": 1.0,
+  "trust_score": 1.0,
+  "priority_test_passed": true,
+  "api_contract_passed": true,
+  "all_commands_passed": true,
+  "commands": {
+    "conversation_classifier": {
+      "name": "conversation_classifier",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "evaluate_conversation_classifier.py"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 2.35,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\conversation_classifier.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\conversation_classifier.err.log"
+    },
+    "darija_comprehension": {
+      "name": "darija_comprehension",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "evaluate_darija_comprehension.py"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 724.37,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_comprehension.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_comprehension.err.log"
+    },
+    "darija_intent": {
+      "name": "darija_intent",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "evaluate_darija_intent.py"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.33,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_intent.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_intent.err.log"
+    },
+    "trust": {
+      "name": "trust",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "evaluate_trust.py",
+        "--report",
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\trust_report.json"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 1118.27,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\trust.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\trust.err.log"
+    },
+    "darija_intent_priority": {
+      "name": "darija_intent_priority",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "test_darija_intent_priority.py"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.58,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_intent_priority.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\darija_intent_priority.err.log"
+    },
+    "api_contract": {
+      "name": "api_contract",
+      "command": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\venv\\Scripts\\python.exe",
+        "-c",
+        "from fastapi.testclient import TestClient\nimport main\nclient = TestClient(main.app, raise_server_exceptions=False)\nresponse = client.post('/chat', json={'question': 'سلام'})\nbody = response.json()\nok = response.status_code == 200 and isinstance(body.get('answer'), str) and isinstance(body.get('sources'), list)\nprint(f'API_CONTRACT={int(ok)} STATUS={response.status_code} KEYS={sorted(body.keys())}')\nraise SystemExit(0 if ok else 1)\n"
+      ],
+      "return_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 5.65,
+      "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\api_contract.out.log",
+      "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_500\\baselines\\api_contract.err.log"
+    }
+  }
+}

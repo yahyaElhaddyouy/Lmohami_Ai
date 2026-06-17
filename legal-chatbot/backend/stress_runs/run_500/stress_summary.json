@@ -1,0 +1,20 @@
+{
+  "total": 500,
+  "passed": 455,
+  "failed": 45,
+  "pass_rate": 0.91,
+  "failures_by_type": {
+    "refusal_error": 4,
+    "latency_error": 44,
+    "citation_error": 14,
+    "intent_error": 1
+  },
+  "average_latency_ms": 10417.39774,
+  "median_latency_ms": 8020.365,
+  "max_latency_ms": 63432.84,
+  "critical_hallucinations": 0,
+  "legal_guarantees": 0,
+  "exceptions": 0,
+  "command_return_code": 0,
+  "complete": true
+}

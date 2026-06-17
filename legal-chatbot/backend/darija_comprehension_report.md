@@ -3,14 +3,14 @@
 ## Summary
 
 - Total cases: 330
-- Passed: 330
-- Failed: 0
-- Pass rate: 100.0%
+- Passed: 326
+- Failed: 4
+- Pass rate: 98.8%
 - Target: 90.0%
 - Status: PASS
-- Average latency: 3209 ms
-- Median latency: 2 ms
-- Max latency: 161603 ms
+- Average latency: 1301 ms
+- Median latency: 3 ms
+- Max latency: 29333 ms
 
 ## Cases By Category
 
@@ -37,11 +37,15 @@
 
 ## Failures By Category
 
-- None
+- general_conversation: 2
+- mixed_french_darija: 2
 
 ## Failed Examples
 
-- None
+- mixed_french_darija_005 [mixed_french_darija]: ana stressé mais labas -> classifier expected general_conversation, got greeting
+- mixed_french_darija_020 [mixed_french_darija]: merci بزاف على الشرح -> classifier expected general_conversation, got thanks
+- general_conversation_005 [general_conversation]: salam wach katfhem darija? -> classifier expected general_conversation, got greeting
+- general_conversation_016 [general_conversation]: كيفاش نقول شكرا بطريقة مغربية -> classifier expected general_conversation, got thanks
 
 ## Output Files
 

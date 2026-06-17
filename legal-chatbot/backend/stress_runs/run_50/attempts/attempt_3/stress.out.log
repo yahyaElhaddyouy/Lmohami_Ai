@@ -1,0 +1,16 @@
+Validated 50 unique cases across 23 topics and 10 styles.
+[0001/0050] PASS salary_unpaid/darija_arabic 12113ms | pass=100.0% eta=9.9m
+[0005/0050] PASS annual_leave/vague 8698ms | pass=100.0% eta=4.8m
+[0010/0050] PASS cdd_cdi/legal_trap 9384ms | pass=100.0% eta=3.4m
+[0015/0050] PASS non_labor_legal_topics/vague 3ms | pass=93.3% eta=5.2m
+[0020/0050] PASS cnss_non_declaration/legal_trap 9778ms | pass=95.0% eta=4.3m
+[0025/0050] PASS fake_articles/vague 7102ms | pass=92.0% eta=4.3m
+[0030/0050] PASS greetings/legal_trap 425ms | pass=93.3% eta=3.1m
+[0035/0050] PASS sick_leave/vague 10095ms | pass=94.3% eta=2.3m
+[0040/0050] PASS labor_inspection/legal_trap 9080ms | pass=95.0% eta=1.5m
+[0045/0050] PASS vague_dismissal/vague 9908ms | pass=93.3% eta=0.8m
+[0050/0050] PASS resignation/legal_trap 10996ms | pass=94.0% eta=0.0m
+
+Stress pass rate: 47/50 (94.00%)
+Failures: 3
+Report: C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\stress_runs\run_50\report.md

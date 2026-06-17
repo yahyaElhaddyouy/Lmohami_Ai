@@ -1,0 +1,18 @@
+Validated 500 unique cases across 23 topics and 10 styles.
+Resuming with 441 matching completed cases.
+[0445/0500] FAIL work_accident/arabizi 46503ms | pass=99.3% eta=33.4m
+[0450/0500] PASS sick_leave/arabizi 12924ms | pass=98.4% eta=31.1m
+[0455/0500] FAIL pregnancy_maternity/typos 57002ms | pass=97.6% eta=28.7m
+[0460/0500] FAIL pregnancy_maternity/polite 53035ms | pass=96.7% eta=26.4m
+[0465/0500] FAIL pregnancy_maternity/legal_trap 52418ms | pass=96.1% eta=22.3m
+[0470/0500] FAIL pregnancy_maternity/mixed_french_darija 52378ms | pass=95.3% eta=19.9m
+[0475/0500] FAIL pregnancy_maternity/angry 58156ms | pass=94.7% eta=16.4m
+[0480/0500] FAIL pregnancy_maternity/emotional 58946ms | pass=94.0% eta=13.4m
+[0485/0500] FAIL pregnancy_maternity/arabizi 55170ms | pass=93.2% eta=10.2m
+[0490/0500] FAIL salary_unpaid/incomplete_facts 45214ms | pass=92.4% eta=6.9m
+[0495/0500] FAIL vague_dismissal/arabizi 53549ms | pass=91.7% eta=3.5m
+[0500/0500] FAIL no_written_contract/angry 50576ms | pass=91.0% eta=0.0m
+
+Stress pass rate: 455/500 (91.00%)
+Failures: 45
+Report: C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\stress_runs\run_500\report.md

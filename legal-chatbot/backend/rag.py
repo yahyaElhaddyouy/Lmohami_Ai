@@ -3,6 +3,7 @@ import os
 import random
 import re
 import sys
+import time
 from dataclasses import dataclass
 from types import SimpleNamespace
 
@@ -49,6 +50,12 @@ USE_VERIFIED_RULES_FIRST = os.getenv("USE_VERIFIED_RULES_FIRST", "true").strip()
     "on",
 }
 CHAT_NUM_PREDICT = int(os.getenv("OLLAMA_NUM_PREDICT", "320"))
+LATENCY_THRESHOLD_MS = int(os.getenv("RAG_LATENCY_THRESHOLD_MS", "30000"))
+CHAT_TIMEOUT_SECONDS = float(os.getenv("OLLAMA_CHAT_TIMEOUT_SECONDS", "18"))
+CHAT_TIMEOUT_SECONDS = max(
+    1.0,
+    min(CHAT_TIMEOUT_SECONDS, max(1.0, (LATENCY_THRESHOLD_MS / 1000.0) - 2.0)),
+)
 
 INSUFFICIENT_CONTEXT_MESSAGE = (
     "ما لقيتش جواب قانوني كافي فالمصدر المتوفر. "
@@ -90,7 +97,7 @@ LEGAL_TOPIC_TERMS = {
         "مرض", "المرض", "مريض", "طبيب", "شهادة طبية",
         "غياب بسبب المرض", "رخصة مرضية", "maladie", "absence pour maladie",
         "certificat médical", "certificat medical", "arrêt", "arret",
-        "repos", "السبيطار", "سبيطار", "absence", "مرضت",
+        "repos", "السبيطار", "سبيطار", "absence", "مرضت", "mrdt",
         "بالمرض", "أكثر من أربعة أيام", "اكثر من اربعة ايام",
     ],
     "termination": [
@@ -106,6 +113,7 @@ LEGAL_TOPIC_TERMS = {
         "fin de contrat", "planning بلا تفسير", "shift الجديد", "البوست",
         "سير ترتاح", "ترتاح شوية", "سالينا معاك", "راه سالينا",
         "حتى نعيطو ليك", "بقا فداركم", "ما بقاوش كيردو",
+        "ma tb9ach tji", "sir trta7", "7ta n3ayto lik",
     ],
     "work_certificate": [
         "شهادة العمل", "شهادة الشغل", "certificat de travail",
@@ -136,17 +144,19 @@ LEGAL_TOPIC_TERMS = {
         "durée indéterminée", "contrat à durée déterminée",
         "contrat a duree determinee", "contrat à durée indéterminée",
         "contrat a duree indeterminee", "خدام بلا عقد", "بلا عقد",
-        "كونطرا", "بلا كونطرا", "بcdd", "بcdi",
+        "كونطرا", "بلا كونطرا", "كونترا", "بلا كونترا", "بcdd", "بcdi",
         "عقد مكتوب", "preuve de l'existence du contrat de travail",
         "preuve de relation de travail", "proof", "relation de travail",
         "إثبات عقد الشغل", "اثبات عقد الشغل", "إثبات عقد", "اثبات عقد",
         "جميع الوسائل", "وسائل الإثبات", "وسائل الاثبات",
         "شفوي", "غير شفوي", "بلا papier", "خدام cash",
+        "khdam bla contrat", "bla contrat", "bla contract", "contrat mektoub",
+        "ma 3tawni contrat", "ma 3tawnich contrat", "kontra",
         "contract temporaire", "temporaire", "période d'essai",
         "periode d'essai", "contrat فيه مدة", "خدام دائم",
     ],
     "maternity_leave": [
-        "حمل", "المرأة الحامل", "الحامل", "مرضت بالحمل", "الولادة", "عطلة الولادة",
+        "حمل", "الحمل", "المرأة الحامل", "الحامل", "مرضت بالحمل", "الولادة", "عطلة الولادة",
         "الحامل", "حامل", "حاملة", "انا حامل", "وأنا حامل", "وانا حامل",
         "حماية الحامل", "حقوق المرأة الحامل",
         "maternité", "maternite", "congé de maternité",
@@ -422,6 +432,7 @@ WORK_RELATED_TERMS = [
 ]
 
 CITATION_PATTERN = re.compile(r"\[المصدر\s+\d+،\s+الصفحة\s+[^\]]+\]")
+CITATION_CAPTURE_PATTERN = re.compile(r"\[المصدر\s+(\d+)،\s+الصفحة\s+([^\]]+)\]")
 ARTICLE_PATTERN = re.compile(r"\barticle\s+(\d+)\b", re.IGNORECASE)
 UNSAFE_PHRASES = ("نضمن", "أكيد تربح")
 UNSUPPORTED_ACTION_PHRASES = ("خاصك دير شكاية",)
@@ -577,8 +588,18 @@ def is_no_written_contract_question(question: str) -> bool:
     markers = (
         "بلا عقد",
         "بلا كونطرا",
+        "بلا كونترا",
+        "ما عطاونيش كونطرا",
+        "ما عطاونيش كونترا",
         "ما عطاونيش contrat",
         "بلا contrat",
+        "khdam bla contrat",
+        "khddam bla contrat",
+        "bla contrat",
+        "bla contract",
+        "contrat mektoub",
+        "ma 3tawni contrat",
+        "ma 3tawnich contrat",
         "شفوي",
         "بلا papier",
         "خدام cash",
@@ -987,6 +1008,9 @@ def asks_for_legal_guarantee(question: str) -> bool:
         "جواب نهائي",
         "نتيجة مضمونة",
         "شحال غادي ناخد بالضبط",
+        "rab7 l9adiya",
+        "ch7al ghadi nakhod bdebt",
+        "2aked lia",
     )
     return any(term in normalized for term in guarantee_terms)
 
@@ -1451,6 +1475,85 @@ def source_pages(chunks: list[SourceChunk]) -> set[str]:
     return {chunk.page for chunk in chunks}
 
 
+def citation_page_number(page: str) -> int | None:
+    match = re.search(r"\d+", str(page))
+    return int(match.group(0)) if match else None
+
+
+def replacement_source_for_citation(
+    source_number: str,
+    cited_page: str,
+    chunks: list[SourceChunk],
+) -> SourceChunk | None:
+    """Choose a returned source for a model citation that drifted."""
+    if not chunks:
+        return None
+
+    clean_page = str(cited_page).strip()
+    clean_number = str(source_number).strip()
+
+    for chunk in chunks:
+        if str(chunk.number) == clean_number and str(chunk.page).strip() == clean_page:
+            return chunk
+
+    for chunk in chunks:
+        if str(chunk.page).strip() == clean_page:
+            return chunk
+
+    for chunk in chunks:
+        if str(chunk.number) == clean_number:
+            return chunk
+
+    target_page = citation_page_number(clean_page)
+    if target_page is not None:
+        numeric_chunks = [
+            (abs(citation_page_number(chunk.page) - target_page), chunk)
+            for chunk in chunks
+            if citation_page_number(chunk.page) is not None
+        ]
+        if numeric_chunks:
+            numeric_chunks.sort(key=lambda item: item[0])
+            return numeric_chunks[0][1]
+
+    return chunks[0]
+
+
+def answer_citations_match_sources(answer: str, chunks: list[SourceChunk]) -> bool:
+    citations = CITATION_CAPTURE_PATTERN.findall(answer)
+    if not citations:
+        return False
+
+    available = {
+        (str(chunk.number), str(chunk.page).strip())
+        for chunk in chunks
+    }
+    return all((str(number), str(page).strip()) in available for number, page in citations)
+
+
+def validate_answer_citations(
+    answer: str,
+    sources: list[SourceChunk],
+    attach_if_missing: bool = True,
+) -> str:
+    """Ensure final legal answers cite only pages present in returned sources."""
+    if not sources:
+        return CITATION_CAPTURE_PATTERN.sub("", answer).strip()
+
+    def replace(match: re.Match) -> str:
+        replacement = replacement_source_for_citation(
+            match.group(1),
+            match.group(2),
+            sources,
+        )
+        return replacement.citation if replacement else ""
+
+    sanitized = CITATION_CAPTURE_PATTERN.sub(replace, answer).strip()
+    if attach_if_missing and not CITATION_PATTERN.search(sanitized):
+        citations = " ".join(source.citation for source in sources[: min(2, len(sources))])
+        sanitized = f"{sanitized.rstrip()}\n\nالمصادر: {citations}"
+    return sanitized
+
+
 def verified_source_subset(question: str, chunks: list[SourceChunk]) -> list[SourceChunk]:
     """Return the most useful cited pages for deterministic answers."""
     if is_labor_inspection_salary_question(question):
@@ -1502,7 +1605,7 @@ def answer_from_verified_rules(
     context = "\n".join(chunk.text for chunk in chunks).lower()
     first_source = first_citation(chunks)
     user_question = original_question or question
-    topic_question = user_question
+    topic_question = combine_query_parts(user_question, question)
 
     if is_waiting_for_hr_callback_question(user_question):
         return brief_answer(
@@ -2112,6 +2215,49 @@ Articles 48 إلى 50 من مدونة الشغل. {first_source}
     return None
 
 
+def source_grounded_fallback_answer(chunks: list[SourceChunk]) -> str | None:
+    """Return a concise source-bound answer when model generation is unavailable."""
+    if not chunks:
+        return None
+
+    return brief_answer(
+        "لقيت مصادر قانونية مرتبطة بالسؤال، ولكن باش نبقا دقيق ما غاديش نزيد تفاصيل ما خرجاتش مباشرة من المصادر المسترجعة.",
+        [
+            "اعتمد على الوثائق والوقائع المكتوبة باش تربط الحالة ديالك بالمصدر اللي رجع فالبحث.",
+            "إلا كان السؤال فيه مبلغ، أجل، أو نتيجة نهائية، خاص هاد النقطة تتراجع مع الوثائق أو الجهة المختصة قبل أي خلاصة.",
+        ],
+        first_citation(chunks),
+        "عمليا، جمع العقد أو أي دليل على الخدمة، كشوفات الأداء، الرسائل، وأي قرار مكتوب مرتبط بالمشكل.",
+    )
+
+
+def fallback_answer_from_sources(
+    expanded_query: str,
+    chunks: list[SourceChunk],
+    original_question: str,
+    legal_confidence: str,
+    uncertainty_prefix: str,
+) -> tuple[str | None, list[SourceChunk]]:
+    fallback_answer = answer_from_verified_rules(expanded_query, chunks, original_question)
+    fallback_chunks = verified_source_subset(original_question, chunks) if fallback_answer else chunks
+    answer_type = "verified_rule" if fallback_answer else "legal_rag"
+
+    if not fallback_answer:
+        fallback_answer = source_grounded_fallback_answer(chunks)
+
+    if not fallback_answer:
+        return None, []
+
+    fallback_answer = soften_uncertain_answer(
+        fallback_answer,
+        original_question,
+        legal_confidence,
+    )
+    fallback_answer = apply_uncertainty_prefix(fallback_answer, uncertainty_prefix)
+    fallback_answer = prepare_legal_answer(fallback_answer, fallback_chunks, answer_type)
+    return fallback_answer, fallback_chunks
+
+
 def format_context(chunks: list[SourceChunk]) -> str:
     return "\n\n---\n\n".join(
         (
@@ -2177,29 +2323,13 @@ def build_messages(
 ):
     analysis_context = format_analysis_for_prompt(analysis)
     answer_shape = """
-استعمل هذا الشكل فكل جواب قانوني:
-
-فهمت الحالة:
-فسر باختصار شنو باين من سؤال المستخدم بلا ما تفترض وقائع ما قالهاش.
-
-الجواب القانوني:
-عطي الجواب القانوني مع الشروط والاستثناءات المهمة.
-
-شنو مهم تعرف:
-- 3 حتى 5 نقط قانونية أو عملية مهمة.
-
-شنو تدير دابا:
-- 3 حتى 5 خطوات عملية.
-
-المصادر:
-ذكر الاستشهادات بصيغة: [المصدر 1، الصفحة 34]
-
-تنبيه:
-هاد الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.
-
-الطول:
-- سؤال قانوني بسيط: 120 حتى 180 كلمة.
-- سؤال قانوني معقد: 180 حتى 300 كلمة.
+طريقة الجواب:
+- ما تستعملش نفس العناوين فكل مرة. اختار شكل طبيعي حسب السؤال.
+- إلا كان السؤال بسيط، جاوب ففقرتين قصار ومعهم المصدر.
+- إلا كان السؤال فيه تفاصيل أو خطوات، استعمل عناوين قليلة غير إلا كانو كيساعدو الوضوح.
+- ذكر غير النقط اللي فعلا مفيدة من السياق، وما تعمرش الجواب بقائمة طويلة.
+- خليه غالبا بين 80 و180 كلمة، وزيد شوية غير إلا كانت الحالة معقدة.
+- ديما زيد تنبيه قصير أن الجواب للتوجيه فقط وماشي استشارة قانونية رسمية.
 """
     system_prompt = f"""
 أنت مساعد قانوني مهني مختص فقط فمدونة الشغل المغربية، وماشي محامي وما كتقدمش ضمانات نهائية.
@@ -2308,6 +2438,16 @@ def should_attach_sources(answer_type: str, sources: list[SourceChunk]) -> bool:
     return answer_type in {"legal_rag", "verified_rule"} and bool(sources)
 
 
+def prepare_legal_answer(
+    answer: str,
+    chunks: list[SourceChunk],
+    answer_type: str = "legal_rag",
+) -> str:
+    if not should_attach_sources(answer_type, chunks):
+        return answer
+    return validate_answer_citations(answer, chunks)
+
+
 def answer_is_valid(
     question: str,
     answer: str,
@@ -2320,6 +2460,8 @@ def answer_is_valid(
     if len(answer) > MAX_GENERATED_ANSWER_CHARS:
         return False
     if should_attach_sources(answer_type, chunks) and not CITATION_PATTERN.search(answer):
+        return False
+    if should_attach_sources(answer_type, chunks) and not answer_citations_match_sources(answer, chunks):
         return False
     if contains_unrelated_language(answer):
         return False
@@ -2428,12 +2570,14 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
         chunks = verified_source_subset(question, chunks)
         verified_answer = soften_uncertain_answer(verified_answer, question, legal_confidence)
         verified_answer = apply_uncertainty_prefix(verified_answer, uncertainty_prefix)
+        verified_answer = prepare_legal_answer(verified_answer, chunks, "verified_rule")
         return (verified_answer, chunks) if return_sources else verified_answer
 
     context = format_context(chunks)
     messages = build_messages(question, context, uncertainty_prefix, legal_confidence, analysis)
 
     try:
+        generation_started = time.perf_counter()
         response = requests.post(
             OLLAMA_CHAT_URL,
             json={
@@ -2449,32 +2593,41 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
                     "num_thread": 8,
                 },
             },
-            timeout=300,
+            timeout=CHAT_TIMEOUT_SECONDS,
         )
         response.raise_for_status()
         answer = response.json()["message"]["content"].strip()
-    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
-        fallback_answer = answer_from_verified_rules(expanded_query, chunks, question)
-        if fallback_answer:
-            fallback_chunks = verified_source_subset(question, chunks)
-            fallback_answer = soften_uncertain_answer(
-                fallback_answer,
+        generation_ms = (time.perf_counter() - generation_started) * 1000
+        if generation_ms > LATENCY_THRESHOLD_MS:
+            fallback_answer, fallback_chunks = fallback_answer_from_sources(
+                expanded_query,
+                chunks,
                 question,
                 legal_confidence,
+                uncertainty_prefix,
             )
-            fallback_answer = apply_uncertainty_prefix(fallback_answer, uncertainty_prefix)
+            if fallback_answer:
+                return (fallback_answer, fallback_chunks) if return_sources else fallback_answer
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout):
+        fallback_answer, fallback_chunks = fallback_answer_from_sources(
+            expanded_query,
+            chunks,
+            question,
+            legal_confidence,
+            uncertainty_prefix,
+        )
+        if fallback_answer:
             return (fallback_answer, fallback_chunks) if return_sources else fallback_answer
         raise
     except requests.exceptions.RequestException as exc:
-        fallback_answer = answer_from_verified_rules(expanded_query, chunks, question)
+        fallback_answer, fallback_chunks = fallback_answer_from_sources(
+            expanded_query,
+            chunks,
+            question,
+            legal_confidence,
+            uncertainty_prefix,
+        )
         if fallback_answer:
-            fallback_chunks = verified_source_subset(question, chunks)
-            fallback_answer = soften_uncertain_answer(
-                fallback_answer,
-                question,
-                legal_confidence,
-            )
-            fallback_answer = apply_uncertainty_prefix(fallback_answer, uncertainty_prefix)
             return (fallback_answer, fallback_chunks) if return_sources else fallback_answer
         error_text = getattr(exc.response, "text", "") if getattr(exc, "response", None) else ""
         raise RuntimeError(
@@ -2487,17 +2640,17 @@ def ask_chatbot(question: str, n_results: int = N_RESULTS, return_sources: bool 
 
     answer = soften_uncertain_answer(answer, question, legal_confidence)
     answer = apply_uncertainty_prefix(answer, uncertainty_prefix)
+    answer = prepare_legal_answer(answer, chunks, "legal_rag")
 
     if not answer_is_valid(expanded_query, answer, chunks, "legal_rag"):
-        fallback_answer = answer_from_verified_rules(expanded_query, chunks, question)
+        fallback_answer, fallback_chunks = fallback_answer_from_sources(
+            expanded_query,
+            chunks,
+            question,
+            legal_confidence,
+            uncertainty_prefix,
+        )
         if fallback_answer:
-            fallback_chunks = verified_source_subset(question, chunks)
-            fallback_answer = soften_uncertain_answer(
-                fallback_answer,
-                question,
-                legal_confidence,
-            )
-            fallback_answer = apply_uncertainty_prefix(fallback_answer, uncertainty_prefix)
             return (fallback_answer, fallback_chunks) if return_sources else fallback_answer
         answer = refusal_answer()
         chunks = []

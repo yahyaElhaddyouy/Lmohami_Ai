@@ -1,0 +1,1988 @@
+
+[greetings_001] السلام عليكم
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_002] سلام
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_003] salam
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_004] salam alikom
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_005] bonjour
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_006] hello
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_007] hi
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_008] صباح الخير
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_009] مسا الخير
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_010] ahlan
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_011] labas
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_012] سلام عليكم خويا
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_013] salam khoya
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_014] السلام
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[greetings_015] salam alaikom
+PASS
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_001] شكرا
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 4 ms
+
+[thanks_002] شكرا بزاف
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 4 ms
+
+[thanks_003] بارك الله فيك
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 4 ms
+
+[thanks_004] يعطيك الصحة
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 3 ms
+
+[thanks_005] merci
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 4 ms
+
+[thanks_006] thanks
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_007] thank you
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_008] lah yhafdek
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_009] chokran
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_010] chokran bzaf
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_011] الله يجازيك بخير
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_012] مزيان شكرا
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_013] merci khoya
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_014] thx
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[thanks_015] شكرا خويا
+PASS
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[daily_darija_001] الجو سخون بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_002] الجو بارد اليوم
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_003] واش كتعرف كازا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_004] كازا عامرة بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_005] شنو واقع اليوم
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 189 ms
+
+[daily_darija_006] نهاري داز عادي
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 87 ms
+
+[daily_darija_007] بغيت غير نهضر شوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_008] واش كتفهم الدارجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[daily_darija_009] شنو كتدير دابا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_010] كيف داير مع العطلة
+PASS
+Route: general_conversation (0.82)
+Sources: 0
+Latency: 0 ms
+
+[daily_darija_011] واش كاين شي جديد
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 102 ms
+
+[daily_darija_012] بغيت نسولك سؤال عام
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_013] هاد النهار طويل بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_014] هادشي عجيب شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 76 ms
+
+[daily_darija_015] واش نقدر نهضر معاك بالدارجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_016] بغيت نحكي ليك واحد الحاجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_017] شنو رأيك فالدارجة المغربية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_018] كتعرف مراكش
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_019] بغيت نضحك شوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_020] راه الجو مزيان
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_021] شحال خاصني من دقيق باش ندير مسمن
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_022] بغيت وصفة ديال الحريرة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_023] فين نمشي نتقضى فالقرب
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_024] شنو ندير للعشا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_025] بغيت نمشي لكازا غدا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_026] الطوبيس تأخر عليا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_027] التلفون ديالي طفا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_028] واش نشري قهوة ولا أتاي
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 145 ms
+
+[daily_darija_029] بغيت نسافر لمراكش فالويكاند
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_030] شنو أحسن وقت نمشي للبحر
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_031] الدار خاصها تنقية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 142 ms
+
+[daily_darija_032] خاصني نشري خبز
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 250 ms
+
+[daily_darija_033] شنو ندير اليوم فالدار
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_034] الطاكسي غالي بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_035] بغيت نشري حوايج جداد
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_036] فين كاين السوق
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 6 ms
+
+[daily_darija_037] شنو ندير إلا ضاع ليا الشارجور
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 6 ms
+
+[daily_darija_038] واش الماكلة واجدة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_039] بغيت نوجد القهوة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_040] الحي فيه الضجيج بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_041] شنو نوجد للفطور
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 109 ms
+
+[daily_darija_042] واش كتعرف طنجة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 90 ms
+
+[daily_darija_043] القهوة بردات
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[daily_darija_044] خاصني نرتب الدار
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 133 ms
+
+[daily_darija_045] فين كاين أقرب مول
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_046] بغيت نمشي نتمشى
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_047] الطريق عامرة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 3 ms
+
+[daily_darija_048] واش كاينة شي فكرة للويكاند
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 164 ms
+
+[daily_darija_049] عطيني شي جملة بالدارجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 10 ms
+
+[daily_darija_050] بغيت نتعلم كلمات مغربية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 11 ms
+
+[emotions_001] ana m9ele9 bzaf
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 10 ms
+
+[emotions_002] ana lyouma far7an
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 13 ms
+
+[emotions_003] مقلق بزاف اليوم
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 15 ms
+
+[emotions_004] حاس براسي تعبان
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 340 ms
+
+[emotions_005] ما فاهم والو
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 11 ms
+
+[emotions_006] قلبي عامر شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 212 ms
+
+[emotions_007] فرحان حيت نجحت
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 78 ms
+
+[emotions_008] حشمت بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_009] تقلقت من هادشي
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 84 ms
+
+[emotions_010] بغيت غير نرتاح شوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_011] حاس براسي مضغوط
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 221 ms
+
+[emotions_012] mab9itch 9ader
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 51 ms
+
+[emotions_013] ana z3fan chwiya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_014] ma fhemt walo
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_015] kan7ess b stress
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 70 ms
+
+[emotions_016] khayef chwiya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 8 ms
+
+[emotions_017] فرحت بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 16 ms
+
+[emotions_018] محبط شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 103 ms
+
+[emotions_019] قلقان وما عرفت علاش
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_020] t3yit بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 7 ms
+
+[emotions_021] راسي عامر بالهضرة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 191 ms
+
+[emotions_022] ما عنديش نفس نهضر
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 7 ms
+
+[emotions_023] بغيت غير شي كلمة زوينة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 5 ms
+
+[emotions_024] اليوم طاقتي ناقصة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 153 ms
+
+[emotions_025] حاس براسي وحداني
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 240 ms
+
+[emotions_026] فرحان بزاف بهاد الخبر
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 5 ms
+
+[emotions_027] مخلوع شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 216 ms
+
+[emotions_028] مضايق وما عرفت السبب
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 105 ms
+
+[emotions_029] bghit nrtah chwya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[emotions_030] ana 3yan lyoum
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 6 ms
+
+[emotions_031] kan7ess brassi mchaوش
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 139 ms
+
+[emotions_032] hadchi daz 3lia tqil
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 84 ms
+
+[emotions_033] ma b9itch fahm rassi
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 99 ms
+
+[emotions_034] bghit chi kalma t-hdeni
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 8 ms
+
+[emotions_035] مقلق من الغد
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 225 ms
+
+[emotions_036] قلبي مخنوق شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 86 ms
+
+[emotions_037] حسيت براسي مرتاح دابا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_038] كانحس براسي عيان
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 91 ms
+
+[emotions_039] lyoum makaynach énergie
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[emotions_040] je suis stressé chwiya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_001] شنو كتعني: الجو سخون بزاف وماقديتش نخرج
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_002] شنو كتعني دابا نجي عندك
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_003] شنو كتعني هاد الجملة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_004] فهمني شنو معنى بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_005] واش كتفهم إلا قلت ليك بغيت نرتاح
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_006] شنو معنى نوض دابا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_007] شنو كتعني ماعنديش نفس
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_008] فهمني هاد الدارجة عفاك
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_009] شنو كتعني لاباس عليك
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_010] شنو معنى تهلا فراسك
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_011] واش تفهمني إلا قلت ليك ماقديتش
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_012] شنو كتعني راه الحالة صعيبة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_013] شنو معنى عندي الزهر
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_014] فهمني كلمة تبرزيط
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_015] شنو كتعني مخنوق
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_016] واش كتفهم هاد العبارة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_017] شنو معنى نجي من بعد
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_018] فهمني دابا شنو ندير فهاد الكلام
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[meaning_questions_019] شنو كتعني ماشي مشكل
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_020] شنو معنى واخا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_021] فهمني كلمة صافي
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_022] شنو معنى غير بشوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_023] شنو كتعني راه دازت
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_024] واش فهمتي إلا قلت لك ماكاين باس
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 137 ms
+
+[meaning_questions_025] شنو معنى دير راسك مافاهمش
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_026] فهم ليا كلمة زعما
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_027] شنو كتعني بالعربية: هادشي بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_028] شنو معنى نمشي دابا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_029] فهمني جملة ماعندي ما نقول
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_030] شنو معنى راه قريب
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_031] شنو كتعني كلمة عفاك
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_032] واش كتفهم دارجة الشمال
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_033] شنو معنى نوض نوض
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_034] فهمني كلمة حدايا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_035] شنو كتعني بالدارجة لا باس
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_036] شنو معنى شوية بشوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_037] واش كتعرف معنى عندي الخاطر
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 118 ms
+
+[meaning_questions_038] فهمني كلمة مخربق
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[meaning_questions_039] شنو كتعني نجيك من بعد
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[meaning_questions_040] شنو معنى ماشي دابا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_002] wach katfhem darija
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_003] chno kat3ni daba nji 3ndek
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_004] bghit ghir nhder m3ak
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_005] lweather skhoun bzaf
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_007] ana fer7an lyoum
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_008] fin kayna casa
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_010] hadchi zwin
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 41 ms
+
+[arabizi_011] lah ykhlik fhemini
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 57 ms
+
+[arabizi_012] wach nji daba
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_013] mab9itch 9ader nsber
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 58 ms
+
+[arabizi_014] kan7ess brassi 3yan
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_015] bghit chi fikra
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_016] ch7al hadi
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_017] had lhala m9ewda chwiya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[arabizi_018] safi fhemt
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 47 ms
+
+[arabizi_019] wach kayn chi haja jdida
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_020] ana daba f casa
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_021] kifach ndir atay
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_022] chno ndir l3cha
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_023] fin nmchi lyoum
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_024] baghi ntmcha chwiya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_025] daba mazal bekri
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_026] bghit ntsenna chwya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_027] kat3ref marrakech
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 44 ms
+
+[arabizi_028] ana bikhir daba
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_029] had lmessage mafhemtouch
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 61 ms
+
+[arabizi_030] wach t9der tشرح lia
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_031] 3afak fhemni had lhedra
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_032] mzyan bzaf
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_033] hadchi ma3jebnich
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 47 ms
+
+[arabizi_034] baghi nbdl lmawdo3
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_035] wach nti m3aya
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_036] chno howa lma3na
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_037] fin kayn lbus
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_038] bghit nkteb message b darija
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[arabizi_039] ana mazal kanfker
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[arabizi_040] safi daba nqder nmchi
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_001] ana fatigué lyoum
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_002] bghit comprendre had lmessage
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[mixed_french_darija_003] wach possible nhder b darija et français
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_004] had situation bizarre chwiya
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 76 ms
+
+[mixed_french_darija_005] ana stressé mais labas
+FAIL
+- classifier expected general_conversation, got greeting
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[mixed_french_darija_006] bghit juste discuter chwia
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_007] lyoum kayn bouchon بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_008] mon téléphone طاح
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 68 ms
+
+[mixed_french_darija_009] service dyal café mzyan
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_010] j'ai besoin nرتاح شوية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 95 ms
+
+[mixed_french_darija_011] wach nta comprends darija
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[mixed_french_darija_012] ana content بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_013] had plan ماعجبنيش
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 83 ms
+
+[mixed_french_darija_014] bghit conseil général
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_015] lyoum météo سخونة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_016] je suis perdu chwiya
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 81 ms
+
+[mixed_french_darija_017] had l'idée zwina
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 80 ms
+
+[mixed_french_darija_018] wach daba nji chez toi
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_019] ana occupé daba
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 5 ms
+
+[mixed_french_darija_020] merci بزاف على الشرح
+FAIL
+- classifier expected general_conversation, got thanks
+Route: thanks (0.95)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_021] je veux comprendre had lkelma
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 102 ms
+
+[mixed_french_darija_022] c'est normal ila gelt safi
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 110 ms
+
+[mixed_french_darija_023] had message فيه darija بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_024] bghit traduction بسيطة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_025] mon ami قال ليا واخا
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_026] planning dyal weekend zwin
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 87 ms
+
+[mixed_french_darija_027] restaurant كان عامر
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 80 ms
+
+[mixed_french_darija_028] transport اليوم صعيب
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 74 ms
+
+[mixed_french_darija_029] j'ai faim شنو ناكل
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 184 ms
+
+[mixed_french_darija_030] la ville عامرة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 67 ms
+
+[mixed_french_darija_031] je suis content اليوم
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_032] حسيت براسي fatigué
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_033] bghit expliquer lma3na
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_034] café سخون بزاف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[mixed_french_darija_035] problème dyal téléphone
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 60 ms
+
+[general_conversation_001] بغيت غير نهضر معاك على الماكلة فالمغرب
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_002] شحال خاصني من دقيق باش ندير مسمن؟
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_003] بغيت نصائح باش نسافر لمراكش هاد الويكاند
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_004] mama mrida bghit n3rf fin nmchi
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_005] salam wach katfhem darija?
+FAIL
+- classifier expected general_conversation, got greeting
+Route: greeting (0.95)
+Sources: 0
+Latency: 2 ms
+
+[general_conversation_006] واش كتفهم إلا قلت ليك بغيت غير نرتاح شوية؟
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_007] wach fhemtini ila gelt lik rah lhala m9ewda chwiya?
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[general_conversation_008] bghit nfhem wach had lmessage kayban fih mochkil f service
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_009] chef dyali kayضغط 3lia بزاف وانا تعييت
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_010] شنو ندير باش نتعلم الدارجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_011] واش تقدر تشرح ليا شي كلمة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 135 ms
+
+[general_conversation_012] بغيت نكتب مساج لصاحبي بالدارجة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 5 ms
+
+[general_conversation_013] شنو الفرق بين بزاف وشوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[general_conversation_014] واش كتعرف الأمثال المغربية
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 218 ms
+
+[general_conversation_015] عطيني مثال ديال هضرة محترمة
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 118 ms
+
+[general_conversation_016] كيفاش نقول شكرا بطريقة مغربية
+FAIL
+- classifier expected general_conversation, got thanks
+Route: thanks (0.95)
+Sources: 0
+Latency: 2 ms
+
+[general_conversation_017] شنو نجاوب إلا قالو ليا لاباس
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_018] بغيت نفهم هاد العبارة قبل ما نجاوب
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_019] واش ممكن نهضر معاك غير شوية
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 3 ms
+
+[general_conversation_020] شنو معنى تهلا فراسك فالهضرة
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_001] كيفاش ندير طلاق اتفاقي
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_002] بغيت نسول على النفقة
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_003] عندي مشكل فالحضانة
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_004] مول الدار بغا يخرجني من الكراء
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_005] شنو ندير فالإرث
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_006] عندي ملف جنائي
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_007] البوليس وقفني شنو ندير
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_008] عندي مخالفة فالطريق
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_009] حادثة سير فالطريق العام
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_010] كيفاش نرفع دعوى تجارية
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_011] بغيت نسجل شركة تجارية
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_012] عندي مشكل مع الجار
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_013] ضريبة الشركة شنو ندير فيها
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_014] مشكل مع البنك
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_015] كيفاش ندير فيزا لفرنسا
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_016] قضية ديال شيك
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_017] دعوى على الكراء
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_018] مشكل فالعقار
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_019] الهجرة لكندا شنو خاصها
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_020] code route شنو كيعني
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_021] بغيت محامي فالطلاق
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[non_labor_law_legal_022] الشرطة عيطات ليا
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_023] نزاع ديال الورث
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_024] كراء محل تجاري
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 1 ms
+
+[non_labor_law_legal_025] مخالفة السرعة
+PASS
+Route: non_labor_law_legal (0.86)
+Sources: 0
+Latency: 2 ms
+
+[labor_law_001] قالو ليا ما تبقاش تجي
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9809 ms
+
+[labor_law_002] ما خلصنيش المشغل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9582 ms
+
+[labor_law_003] طردوني من الخدمة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9933 ms
+
+[labor_law_004] مخلاونيش ندخل للشركة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9149 ms
+
+[labor_law_005] منعوني ندخل نخدم
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8967 ms
+
+[labor_law_006] ما قبلونيش نرجع للخدمة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7681 ms
+
+[labor_law_007] المشغل نقص ليا فالصالير
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9324 ms
+
+[labor_law_008] واش مفتشية الشغل كتدخل فمشكل الأجر
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8857 ms
+
+[labor_law_009] ما مصرحش بيا ف CNSS
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 10502 ms
+
+[labor_law_010] ما تصرحتش فالضمان الاجتماعي
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8680 ms
+
+[labor_law_011] وقع ليا حادث داخل الخدمة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9449 ms
+
+[labor_law_012] تجرحت فالعمل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 10310 ms
+
+[labor_law_013] بغيت شهادة العمل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8684 ms
+
+[labor_law_014] ما عطاونيش شهادة الشغل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7086 ms
+
+[labor_law_015] شحال عندي من نهار ديال الكونجي
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 7298 ms
+
+[labor_law_016] العطلة السنوية واش كتخلص
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 7703 ms
+
+[labor_law_017] مرضت وغيبت شنو خاصني ندير
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7938 ms
+
+[labor_law_018] عندي شهادة طبية
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 7995 ms
+
+[labor_law_019] أنا حامل والمشغل بغا يطردني
+PASS
+Route: labor_law (0.78)
+Sources: 2
+Latency: 9269 ms
+
+[labor_law_020] رجعت من الولادة وما قبلونيش نرجع
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 10908 ms
+
+[labor_law_021] شنو الفرق بين CDD و CDI
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8703 ms
+
+[labor_law_022] خدام بلا عقد
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9068 ms
+
+[labor_law_023] بلا كونطرا واش عندي حق
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7596 ms
+
+[labor_law_024] شنو هو préavis
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 8827 ms
+
+[labor_law_025] واش كاين préavis ف CDI
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8177 ms
+
+[labor_law_026] بغيت نستاقل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8725 ms
+
+[labor_law_027] جبروني نكتب استقالة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9556 ms
+
+[labor_law_028] خدمت ساعات إضافية
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9402 ms
+
+[labor_law_029] السوايع الزايدة واش فيها زيادة فالصالير
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 8940 ms
+
+[labor_law_030] شنو هو الخطأ الجسيم
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 3715 ms
+
+[labor_law_031] قالو عندي faute grave
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9803 ms
+
+[labor_law_032] محضر الاستماع قبل الطرد
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8821 ms
+
+[labor_law_033] شنو المسطرة قبل الطرد فالشغل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9132 ms
+
+[labor_law_034] واش عقد الشغل خاصو يكون مكتوب
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 29333 ms
+
+[labor_law_035] certificat de travail شنو خاص يكون فيه
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 12392 ms
+
+[general_labor_boundary_002] بغيت نمشي لعطلة مع العائلة
+PASS
+Route: general_conversation (0.82)
+Sources: 0
+Latency: 0 ms
+
+[general_labor_boundary_003] العطلة مع صحابي زوينة
+PASS
+Route: general_conversation (0.82)
+Sources: 0
+Latency: 0 ms
+
+[general_labor_boundary_004] بغيت نرتاح من كلشي
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 9 ms
+
+[general_labor_boundary_005] الجو فالشركة ديال القهوة زوين
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 9 ms
+
+[general_labor_boundary_007] chef dyal restaurant كان لطيف
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 200 ms
+
+[general_labor_boundary_008] مشيت للبحر بعد الخدمة البارح
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 242 ms
+
+[general_labor_boundary_009] خدمت على راسي فالرياضة اليوم
+PASS
+Route: general_conversation (0.55)
+Sources: 0
+Latency: 275 ms
+
+[general_labor_boundary_010] بغيت نصبر شوية ونشوف
+PASS
+Route: general_conversation (0.74)
+Sources: 0
+Latency: 4 ms
+
+[labor_boundary_001] العطلة السنوية فالشغل شحال فيها
+PASS
+Route: labor_law (0.90)
+Sources: 1
+Latency: 8677 ms
+
+[labor_boundary_002] service RH قالو ليا ما تبقاش تجي
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9084 ms
+
+[labor_boundary_003] chef dyali f service نقص ليا فالصالير
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8179 ms
+
+[labor_boundary_004] الباطرون قال سير حتى نعيطو ليك
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 8842 ms
+
+[labor_boundary_005] HR ما عطاونيش شهادة العمل
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7846 ms
+
+[labor_boundary_006] المشغل منعني ندخل نخدم
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 10973 ms
+
+[labor_boundary_007] الشركة ما صرحتش بيا فالضمان
+PASS
+Route: labor_law (0.78)
+Sources: 2
+Latency: 10220 ms
+
+[labor_boundary_008] تجرحت فالورشة أثناء الخدمة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 7448 ms
+
+[labor_boundary_009] بغيت نعرف حقوقي فالأجر
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9349 ms
+
+[labor_boundary_010] خدام بلا كونطرا فشركة
+PASS
+Route: labor_law (0.90)
+Sources: 2
+Latency: 9429 ms
+
+Darija comprehension score: 326/330 (98.8%)
+Status: PASS
+Report written to C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\darija_comprehension_report.md

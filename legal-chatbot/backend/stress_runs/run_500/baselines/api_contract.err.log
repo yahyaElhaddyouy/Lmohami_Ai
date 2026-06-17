@@ -1,0 +1,2 @@
+2026-06-11 03:19:32,454 INFO POST /chat -> 200 5.08ms
+2026-06-11 03:19:32,455 INFO HTTP Request: POST http://testserver/chat "HTTP/1.1 200 OK"

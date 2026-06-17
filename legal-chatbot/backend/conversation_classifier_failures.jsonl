@@ -1,0 +1,2 @@
+{"id":"mixed_french_darija_005","coverage":"mixed_french_darija","question":"ana stressé mais labas","expected_type":"general_conversation","actual_type":"greeting","confidence":0.95,"passed":false}
+{"id":"mixed_french_darija_020","coverage":"mixed_french_darija","question":"merci بزاف على الشرح","expected_type":"general_conversation","actual_type":"thanks","confidence":0.95,"passed":false}

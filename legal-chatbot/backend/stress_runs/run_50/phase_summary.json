@@ -1,0 +1,220 @@
+{
+  "phase": 50,
+  "attempts": 1,
+  "stress": {
+    "total": 50,
+    "passed": 50,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "failures_by_type": {},
+    "average_latency_ms": 6300.3198,
+    "median_latency_ms": 7635.985000000001,
+    "max_latency_ms": 12462.41,
+    "critical_hallucinations": 0,
+    "legal_guarantees": 0,
+    "exceptions": 0,
+    "command_return_code": 0,
+    "complete": true
+  },
+  "baselines": {
+    "conversation_classifier_score": 0.992,
+    "darija_comprehension_score": 0.988,
+    "intent_score": 1.0,
+    "trust_score": 1.0,
+    "priority_test_passed": true,
+    "api_contract_passed": true,
+    "all_commands_passed": true,
+    "commands": {
+      "conversation_classifier": {
+        "name": "conversation_classifier",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "evaluate_conversation_classifier.py"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 1.73,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\conversation_classifier.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\conversation_classifier.err.log"
+      },
+      "darija_comprehension": {
+        "name": "darija_comprehension",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "evaluate_darija_comprehension.py"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 453.68,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_comprehension.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_comprehension.err.log"
+      },
+      "darija_intent": {
+        "name": "darija_intent",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "evaluate_darija_intent.py"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 0.23,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_intent.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_intent.err.log"
+      },
+      "trust": {
+        "name": "trust",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "evaluate_trust.py",
+          "--report",
+          "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\trust_report.json"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 921.53,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\trust.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\trust.err.log"
+      },
+      "darija_intent_priority": {
+        "name": "darija_intent_priority",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "test_darija_intent_priority.py"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 0.6,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_intent_priority.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\darija_intent_priority.err.log"
+      },
+      "api_contract": {
+        "name": "api_contract",
+        "command": [
+          "C:\\Python314\\python.exe",
+          "-c",
+          "from fastapi.testclient import TestClient\nimport main\nclient = TestClient(main.app, raise_server_exceptions=False)\nresponse = client.post('/chat', json={'question': 'سلام'})\nbody = response.json()\nok = response.status_code == 200 and isinstance(body.get('answer'), str) and isinstance(body.get('sources'), list)\nprint(f'API_CONTRACT={int(ok)} STATUS={response.status_code} KEYS={sorted(body.keys())}')\nraise SystemExit(0 if ok else 1)\n"
+        ],
+        "return_code": 0,
+        "timed_out": false,
+        "elapsed_seconds": 2.96,
+        "stdout_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\api_contract.out.log",
+        "stderr_path": "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_runs\\run_50\\baselines\\api_contract.err.log"
+      }
+    }
+  },
+  "gate_passed": true,
+  "gate_reasons": [],
+  "fixes_applied": [
+    {
+      "phase": 50,
+      "attempt": 1,
+      "name": "verified_rules_first",
+      "description": "Restore the existing verified-rule-first default to reduce unsafe LLM drift, citation mismatches, and >30s generation latency.",
+      "failure_types": [
+        "latency_error",
+        "citation_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\rag.py"
+      ],
+      "applied_at": "2026-06-10 00:22:02"
+    },
+    {
+      "phase": 50,
+      "attempt": 2,
+      "name": "vague_dismissal_routing",
+      "description": "Route explicit 'wait at home until we call you' dismissal wording into the labor-law path.",
+      "failure_types": [
+        "conversation_routing_error",
+        "refusal_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\conversation_classifier.py"
+      ],
+      "applied_at": "2026-06-10 00:26:53"
+    },
+    {
+      "phase": 50,
+      "attempt": 1,
+      "name": "routing_variants",
+      "description": "Recognize embedded greetings/thanks and observed Arabizi or no-contract labor phrases without changing legal answers.",
+      "failure_types": [
+        "conversation_routing_error",
+        "refusal_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\conversation_classifier.py"
+      ],
+      "applied_at": "2026-06-10 01:08:29"
+    },
+    {
+      "phase": 50,
+      "attempt": 2,
+      "name": "paid_leave_intent_priority",
+      "description": "Keep explicit annual-leave terms specific when the user also says the details are unclear.",
+      "failure_types": [
+        "intent_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\legal_understanding.py"
+      ],
+      "applied_at": "2026-06-10 01:13:41"
+    },
+    {
+      "phase": 50,
+      "attempt": 1,
+      "name": "social_phrase_boundary_correction",
+      "description": "Correct the standalone greeting/thanks regex escaping so prefixed social messages route as intended.",
+      "failure_types": [
+        "conversation_routing_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\conversation_classifier.py"
+      ],
+      "applied_at": "2026-06-10 01:54:48"
+    },
+    {
+      "phase": 50,
+      "attempt": 2,
+      "name": "arabizi_legal_intents",
+      "description": "Recognize the observed Arabizi sick-leave and dismissal wording in legal understanding without changing any legal rule content.",
+      "failure_types": [
+        "intent_error",
+        "refusal_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\legal_understanding.py"
+      ],
+      "applied_at": "2026-06-10 02:00:55"
+    },
+    {
+      "phase": 50,
+      "attempt": 4,
+      "name": "social_routing_regression_correction",
+      "description": "Limit embedded greeting/thanks routing to exact messages and explicit polite wrappers so ordinary Darija sentences containing social words remain general conversation.",
+      "failure_types": [
+        "conversation_routing_error",
+        "ux_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\conversation_classifier.py",
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\stress_real_users.py"
+      ],
+      "applied_at": "2026-06-10 03:10:00"
+    },
+    {
+      "phase": 50,
+      "attempt": 5,
+      "name": "verified_topic_aliases",
+      "description": "Map the observed Arabizi sick-leave/dismissal phrases and the Arabic pregnancy spelling الحمل to existing RAG topics so verified source-backed answers are used without changing legal content.",
+      "failure_types": [
+        "latency_error",
+        "refusal_error"
+      ],
+      "files_modified": [
+        "C:\\Users\\MSI\\Desktop\\lmo7ami\\ai chatbot\\legal-chatbot\\backend\\rag.py"
+      ],
+      "applied_at": "2026-06-10 04:00:00"
+    }
+  ]
+}

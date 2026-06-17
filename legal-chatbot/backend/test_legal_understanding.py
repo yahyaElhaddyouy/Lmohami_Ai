@@ -44,6 +44,25 @@ class LegalUnderstandingTests(unittest.TestCase):
         self.assertEqual(analysis["facts"]["salary_status"], "unpaid")
         self.assertIn("salary_payment", analysis["legal_issues"])
 
+    def test_stress_intent_regressions(self):
+        cases = [
+            ("bghit nsta9el o ma 3arefch lmassatra", "resignation"),
+            ("t7t f lkhdma o tjre7t", "work_accident"),
+            ("khdemt jouj chhor o ma 3tawni walo", "salary_unpaid"),
+            ("charika katmatel f chahadat l3amal", "work_certificate"),
+            ("chef gal ma tjich ghda o ma fhemtch", "dismissal_unclear"),
+            ("trdoni mn lkhdma bla sabab mektoub", "dismissal"),
+            ("الساعات الإضافية ما بايناش فالبولتان", "overtime"),
+            ("ana 7amla o patron bgha ytrdni", "maternity_protection"),
+            ("3ndi ghir messages m3a patron bach nthbet lkhdma", "contract"),
+            ("khsmo lia nhar o ana kont 7ader", "salary_unpaid"),
+            ("kifach ndir chikaya 3nd mofatich choghl", "labor_inspection"),
+        ]
+
+        for question, expected in cases:
+            with self.subTest(question=question):
+                self.assertEqual(analyze_question(question)["intent"], expected)
+
     def test_refused_access_without_maternity_is_unclear_dismissal(self):
         cases = [
             "مخلاونيش ندخل للشركة",

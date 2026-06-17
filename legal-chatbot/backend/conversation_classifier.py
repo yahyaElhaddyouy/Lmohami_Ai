@@ -49,8 +49,11 @@ GREETINGS = {
     "hi",
     "صباح الخير",
     "مسا الخير",
+    "مساء النور",
+    "مرحبا",
     "ahlan",
     "labas",
+    "sba7 lkhir",
     "سلام عليكم خويا",
     "salam khoya",
 }
@@ -64,6 +67,7 @@ THANKS = {
     "thanks",
     "thank you",
     "lah yhafdek",
+    "lah yjazik bikhir",
     "chokran",
     "chokran bzaf",
     "الله يجازيك بخير",
@@ -74,11 +78,57 @@ THANKS = {
 }
 
 LABOR_PHRASES = (
+    "trdoni",
+    "nsta9el",
+    "isti9ala",
+    "t7t f lkhdma",
+    "tjre7t",
+    "machine drbatni",
+    "khdemt jouj chhor",
+    "ma 3tawni walo",
+    "ma khlsonich",
+    "chahadat l3amal",
+    "attestation",
+    "ma tjich ghda",
+    "7ydo smiti",
+    "planning bla tafsir",
+    "ana 7amla",
+    "grossesse",
+    "tbib 3tani repos",
+    "kankhdem sa3at zayda",
+    "heures sup",
+    "accident travail",
+    "resignation",
+    "ma 3tawnich contrat",
+    "messages m3a patron",
+    "nthbet lkhdma",
+    "khsmo lia",
+    "mofatich choghl",
+    "chikaya 3nd mofatich",
+    "rab7 l9adiya 100",
+    "ch7al ghadi nakhod bdebt",
+    "patron gal lia ma tb9ach tji",
+    "ma tb9ach tji",
+    "sir trta7",
+    "7ta n3ayto lik",
+    "mrdt",
+    "certificat medical",
+    "khdam bla contrat",
+    "bla contrat",
+    "خدام بلا عقد",
+    "بلا عقد مكتوب",
+    "سير ترتاح حتى نعيطو ليك",
+    "سير ترتاح",
+    "حتى نعيطو ليك",
+    "بقا فداركم",
     "ما خلصنيش",
     "ما خلصونيش",
     "ما تخلصتش",
     "ما عطانيش الصالير",
     "ما عطاونيش الصالير",
+    "ما عطاوني والو",
+    "ما عطاونيش كونطرا",
+    "خدمت شهرين",
     "الصالير",
     "السالير",
     "الخلاص",
@@ -101,10 +151,13 @@ LABOR_PHRASES = (
     "بغيت نستاقل",
     "نستاقل",
     "استاقل",
+    "استقالة",
     "بغيت نمشي من الخدمة",
     "بغيت نخرج من الخدمة",
     "تجرحت فالعمل",
     "تجرحت فالورشة",
+    "الماكينة ضرباتني",
+    "فالسبيطار",
     "تكسرت فالخدمة",
     "تكسرت فالعمل",
     "ما مصرحش بيا",
@@ -130,6 +183,8 @@ LABOR_PHRASES = (
     "conge",
     "كونجي",
     "ساعات إضافية",
+    "ساعات زايدة",
+    "من بعد الوقت",
     "الساعات الإضافية",
     "الساعات الاضافية",
     "سوايع زايدة",
@@ -152,7 +207,10 @@ LABOR_PHRASES = (
     "certificat médical",
     "certificat medical",
     "الضمان الاجتماعي",
+    "ما بان حتى شهر فالضمان",
     "عقد الشغل",
+    "مساجات مع المشغل",
+    "نثبت الخدمة",
     "إثبات عقد",
     "اثبات عقد",
     "relation de travail",
@@ -177,6 +235,13 @@ LABOR_PHRASES = (
     "préavis",
     "demission",
     "démission",
+    "حيدو سميتي",
+    "البلانينغ",
+    "بدلو ليا البوست",
+    "اقتطاع فالخلصة",
+    "خصمو ليا",
+    "شحال غادي ناخد بالضبط",
+    "رابح القضية",
 )
 
 LABOR_CONTEXT_TERMS = (
@@ -220,6 +285,10 @@ LABOR_ACTION_TERMS = (
 )
 
 NON_LABOR_LEGAL_TERMS = (
+    "tala9",
+    "nafa9a",
+    "moul dar",
+    "kira",
     "طلاق",
     "نفقة",
     "حضانة",
@@ -368,6 +437,55 @@ def is_short_exact(normalized: str, terms: set[str]) -> bool:
     return normalized in {normalize_text(term) for term in terms}
 
 
+def has_standalone_phrase(normalized: str, phrase: str) -> bool:
+    normalized_phrase = normalize_text(phrase)
+    if not normalized_phrase:
+        return False
+    return bool(
+        re.search(
+            rf"(?:^|\s){re.escape(normalized_phrase)}(?:$|\s)",
+            normalized,
+        )
+    )
+
+
+def is_wrapped_social_message(
+    normalized: str,
+    terms: set[str],
+    *,
+    allow_arabic_greeting_prefix: bool = False,
+    allow_embedded: bool = False,
+) -> bool:
+    social_normalized = re.sub(r"[،؛؟]+", " ", normalized)
+    social_normalized = re.sub(r"\s+", " ", social_normalized).strip()
+
+    if is_short_exact(social_normalized, terms):
+        return True
+
+    candidate = social_normalized
+    polite_prefix = normalize_text("عافاك الله يخليك")
+    if candidate.startswith(f"{polite_prefix} "):
+        candidate = candidate[len(polite_prefix) :].strip()
+
+    for suffix in ("عافاك", "من فضلك"):
+        normalized_suffix = normalize_text(suffix)
+        if candidate.endswith(f" {normalized_suffix}"):
+            candidate = candidate[: -len(normalized_suffix)].strip()
+
+    if is_short_exact(candidate, terms):
+        return True
+
+    if allow_embedded and any(
+        has_standalone_phrase(social_normalized, term) for term in terms
+    ):
+        return True
+
+    return (
+        allow_arabic_greeting_prefix
+        and social_normalized.startswith(f"{normalize_text('السلام عليكم')} ")
+    )
+
+
 def classify_conversation(question: str) -> ConversationClassification:
     normalized = normalize_text(question)
     if not normalized or not re.search(r"[A-Za-z0-9\u0621-\u064A\u0660-\u0669]", normalized):
@@ -387,10 +505,15 @@ def classify_conversation(question: str) -> ConversationClassification:
     if non_labor_legal:
         return {"type": "non_labor_law_legal", "confidence": 0.86}
 
-    if is_short_exact(normalized, GREETINGS):
+    if is_wrapped_social_message(
+        normalized,
+        GREETINGS,
+        allow_arabic_greeting_prefix=True,
+        allow_embedded=True,
+    ):
         return {"type": "greeting", "confidence": 0.95}
 
-    if is_short_exact(normalized, THANKS):
+    if is_wrapped_social_message(normalized, THANKS, allow_embedded=True):
         return {"type": "thanks", "confidence": 0.95}
 
     if contains_any(normalized, GENERAL_DARIJA_SIGNALS):

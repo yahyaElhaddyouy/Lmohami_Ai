@@ -1,0 +1,4 @@
+Validated 2000 unique cases across 23 topics and 10 styles.
+Resuming with 20 matching completed cases.
+[0030/2000] FAIL overtime/darija_arabic 50406ms | pass=30.0% eta=1361.8m
+[0040/2000] FAIL preavis/arabizi 41138ms | pass=27.5% eta=834.0m

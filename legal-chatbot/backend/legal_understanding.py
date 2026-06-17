@@ -81,6 +81,11 @@ def _has_contract_reference(text_norm: str) -> bool:
         "ما عنديش كونطرا",
         "ما عطاونيش contrat",
         "ما عطاونيش عقد",
+        "ما عطاونيش كونطرا",
+        "messages m3a patron",
+        "مساجات مع المشغل",
+        "nthbet lkhdma",
+        "نثبت الخدمة",
         "عقد مكتوب",
         "شفوي",
         "غير شفوي",
@@ -215,6 +220,8 @@ def analyze_question(question: str) -> dict[str, Any]:
         "امومة",
         "أمومة",
         "grossesse",
+        "ana 7amla",
+        "7amla",
         "maternité",
         "maternite",
     )
@@ -248,11 +255,29 @@ def analyze_question(question: str) -> dict[str, Any]:
         "تاديت",
         "ضرباتني",
         "machine",
+        "t7t f lkhdma",
+        "tjre7t",
         "ماكينة",
         "الورشة",
         "accident",
     )
-    salary_terms = ("خلص", "صالير", "سالير", "أجر", "اجر", "salaire", "اقتطاع", "ناقص")
+    salary_terms = (
+        "خلص",
+        "صالير",
+        "سالير",
+        "أجر",
+        "اجر",
+        "salaire",
+        "اقتطاع",
+        "ناقص",
+        "ما عطاوني والو",
+        "خدمت شهرين",
+        "ma khlsonich",
+        "khdemt jouj chhor",
+        "ma 3tawni walo",
+        "khsmo lia",
+        "خصمو ليا",
+    )
     dismissal_terms = (
         "طرد",
         "طردوني",
@@ -262,6 +287,12 @@ def analyze_question(question: str) -> dict[str, Any]:
         "حيدوني",
         "حيدو",
         "حيدوه",
+        "ma tb9ach tji",
+        "trdoni",
+        "ma tjich ghda",
+        "7ydo smiti",
+        "sir trta7",
+        "7ta n3ayto lik",
         "ما تبقاش تجي",
         "ما تجيش",
         "منعوني",
@@ -285,11 +316,17 @@ def analyze_question(question: str) -> dict[str, Any]:
         "سدو عليا",
         "fin de contrat",
         "planning بلا تفسير",
+        "planning bla tafsir",
         "shift الجديد",
         "البوست",
         "poste",
     )
     vague_dismissal_terms = (
+        "ma tb9ach tji",
+        "ma tjich ghda",
+        "7ydo smiti",
+        "sir trta7",
+        "7ta n3ayto lik",
         "ما تبقاش تجي",
         "ما تجيش",
         "ما بقاوش كيردو",
@@ -306,6 +343,7 @@ def analyze_question(question: str) -> dict[str, Any]:
         "سدّو عليا",
         "سدو عليا",
         "planning بلا تفسير",
+        "planning bla tafsir",
         "shift الجديد",
     )
     refused_access_terms = (
@@ -337,8 +375,19 @@ def analyze_question(question: str) -> dict[str, Any]:
         "للتفتيش",
         "inspection",
         "inspecteur",
+        "mofatich choghl",
+        "chikaya 3nd mofatich",
     )
-    resignation_terms = ("نستاقل", "استقالة", "استاقل", "démission", "demission", "resignation")
+    resignation_terms = (
+        "نستاقل",
+        "استقالة",
+        "استاقل",
+        "nsta9el",
+        "isti9ala",
+        "démission",
+        "demission",
+        "resignation",
+    )
     preavis_terms = (
         "preavis",
         "préavis",
@@ -357,6 +406,7 @@ def analyze_question(question: str) -> dict[str, Any]:
         "شهادة ناقصة",
         "certificat de travail",
         "attestation",
+        "chahadat l3amal",
         "رفضو يعطوني papier",
         "رفض يعطيني papier",
         "ورقة الخدمة",
@@ -364,7 +414,10 @@ def analyze_question(question: str) -> dict[str, Any]:
     overtime_terms = (
         "سوايع زايدة",
         "ساعات إضافية",
+        "الساعات الإضافية",
         "ساعات زايدة",
+        "sa3at zayda",
+        "kankhdem sa3at zayda",
         "heures sup",
         "overtime",
         "راحة الأسبوعية",
@@ -379,6 +432,7 @@ def analyze_question(question: str) -> dict[str, Any]:
     sick_leave_terms = (
         "مرض",
         "مرضت",
+        "mrdt",
         "طبيب",
         "شهادة طبية",
         "maladie",
@@ -407,6 +461,7 @@ def analyze_question(question: str) -> dict[str, Any]:
         + dismissal_terms
         + disciplinary_terms
         + sick_leave_terms
+        + ("كونجي", "عطلة", "congé", "conge")
     )
 
     if (
@@ -586,7 +641,18 @@ def analyze_question(question: str) -> dict[str, Any]:
 
     if _has(text, salary_terms):
         result["intent"] = "salary_unpaid"
-        if _has(text, ("ما خلص", "ما تخلص", "ما عطانيش", "باقي")):
+        if _has(
+            text,
+            (
+                "ما خلص",
+                "ما تخلص",
+                "ما عطانيش",
+                "ما عطاوني والو",
+                "ma khlsonich",
+                "ma 3tawni walo",
+                "باقي",
+            ),
+        ):
             facts["salary_status"] = "unpaid"
         elif _has(text, ("ناقص", "نقص", "اقتطاع", "قطعو")):
             facts["salary_status"] = "underpaid_or_deducted"

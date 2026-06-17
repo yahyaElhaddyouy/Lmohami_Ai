@@ -1,0 +1,11 @@
+Conversation classifier evaluation
+- cases: 238
+- passed: 236
+- failed: 2
+- accuracy: 99.2%
+- target: 95.0%
+Status: PASS
+Failures:
+- mixed_french_darija_005: expected=general_conversation actual=greeting question=ana stressé mais labas
+- mixed_french_darija_020: expected=general_conversation actual=thanks question=merci بزاف على الشرح
+Report written to C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\conversation_classifier_report.md

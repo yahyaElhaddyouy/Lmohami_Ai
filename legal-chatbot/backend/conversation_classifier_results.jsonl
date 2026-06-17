@@ -112,7 +112,7 @@
 {"id":"mixed_french_darija_002","coverage":"mixed_french_darija","question":"bghit comprendre had lmessage","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"mixed_french_darija_003","coverage":"mixed_french_darija","question":"wach possible nhder b darija et français","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"mixed_french_darija_004","coverage":"mixed_french_darija","question":"had situation bizarre chwiya","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.55,"passed":true}
-{"id":"mixed_french_darija_005","coverage":"mixed_french_darija","question":"ana stressé mais labas","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
+{"id":"mixed_french_darija_005","coverage":"mixed_french_darija","question":"ana stressé mais labas","expected_type":"general_conversation","actual_type":"greeting","confidence":0.95,"passed":false}
 {"id":"mixed_french_darija_006","coverage":"mixed_french_darija","question":"bghit juste discuter chwia","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"mixed_french_darija_007","coverage":"mixed_french_darija","question":"lyoum kayn bouchon بزاف","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"mixed_french_darija_008","coverage":"mixed_french_darija","question":"mon téléphone طاح","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.55,"passed":true}
@@ -127,7 +127,7 @@
 {"id":"mixed_french_darija_017","coverage":"mixed_french_darija","question":"had l'idée zwina","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.55,"passed":true}
 {"id":"mixed_french_darija_018","coverage":"mixed_french_darija","question":"wach daba nji chez toi","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"mixed_french_darija_019","coverage":"mixed_french_darija","question":"ana occupé daba","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
-{"id":"mixed_french_darija_020","coverage":"mixed_french_darija","question":"merci بزاف على الشرح","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
+{"id":"mixed_french_darija_020","coverage":"mixed_french_darija","question":"merci بزاف على الشرح","expected_type":"general_conversation","actual_type":"thanks","confidence":0.95,"passed":false}
 {"id":"arabizi_002","coverage":"arabizi","question":"wach katfhem darija","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"arabizi_003","coverage":"arabizi","question":"chno kat3ni daba nji 3ndek","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
 {"id":"arabizi_004","coverage":"arabizi","question":"bghit ghir nhder m3ak","expected_type":"general_conversation","actual_type":"general_conversation","confidence":0.74,"passed":true}
@@ -168,12 +168,12 @@
 {"id":"labor_law_020","coverage":"labor_law","question":"رجعت من الولادة وما قبلونيش نرجع","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_021","coverage":"labor_law","question":"شنو الفرق بين CDD و CDI","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_022","coverage":"labor_law","question":"عندي عقد محدد المدة وبقى مستمر","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
-{"id":"labor_law_023","coverage":"labor_law","question":"خدام بلا عقد","expected_type":"labor_law","actual_type":"labor_law","confidence":0.86,"passed":true}
+{"id":"labor_law_023","coverage":"labor_law","question":"خدام بلا عقد","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_024","coverage":"labor_law","question":"بلا كونطرا واش عندي حق","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_025","coverage":"labor_law","question":"شنو هو préavis","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_026","coverage":"labor_law","question":"واش كاين préavis ف CDI","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_027","coverage":"labor_law","question":"بغيت نستاقل","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
-{"id":"labor_law_028","coverage":"labor_law","question":"جبروني نكتب استقالة","expected_type":"labor_law","actual_type":"labor_law","confidence":0.86,"passed":true}
+{"id":"labor_law_028","coverage":"labor_law","question":"جبروني نكتب استقالة","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_029","coverage":"labor_law","question":"خدمت ساعات إضافية","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_030","coverage":"labor_law","question":"السوايع الزايدة واش فيها زيادة فالصالير","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}
 {"id":"labor_law_031","coverage":"labor_law","question":"شنو هو الخطأ الجسيم","expected_type":"labor_law","actual_type":"labor_law","confidence":0.9,"passed":true}

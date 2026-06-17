@@ -1,0 +1,19 @@
+{
+  "total": 200,
+  "passed": 183,
+  "failed": 17,
+  "pass_rate": 0.915,
+  "failures_by_type": {
+    "conversation_routing_error": 16,
+    "refusal_error": 10,
+    "latency_error": 1
+  },
+  "average_latency_ms": 6804.53885,
+  "median_latency_ms": 8156.955,
+  "max_latency_ms": 50367.76,
+  "critical_hallucinations": 0,
+  "legal_guarantees": 0,
+  "exceptions": 0,
+  "command_return_code": 0,
+  "complete": true
+}

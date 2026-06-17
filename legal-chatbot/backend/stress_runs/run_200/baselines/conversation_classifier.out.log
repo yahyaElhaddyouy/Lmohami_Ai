@@ -1,0 +1,8 @@
+Conversation classifier evaluation
+- cases: 238
+- passed: 238
+- failed: 0
+- accuracy: 100.0%
+- target: 95.0%
+Status: PASS
+Report written to C:\Users\MSI\Desktop\lmo7ami\ai chatbot\legal-chatbot\backend\conversation_classifier_report.md
